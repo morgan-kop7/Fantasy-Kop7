@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Fantasy Kop 7</title>
 
 <style>
@@ -11,24 +13,27 @@
 :root{
   --bg:#146c3f;
   --card:#1c7f4c;
-  --card-selected:#0d5233;
+  --card-dark:#0d5233;
   --border:#2f9463;
-  --accent:#ffffff;
-  --text:#ffffff;
+  --white:#ffffff;
   --muted:#dff5e6;
+  --danger:#b3261e;
+  --gold:#f5c542;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   background:var(--bg);
-  color:var(--text);
+  color:var(--white);
   font-family:'Inter',sans-serif;
 }
 
 .wrap{
-  max-width:900px;
+  max-width:950px;
   margin:auto;
   padding:20px;
 }
@@ -42,52 +47,19 @@ h1{
   margin:0;
   font-family:'Anton',sans-serif;
   letter-spacing:1px;
+  font-size:42px;
+}
+
+h2,h3{
+  margin-top:0;
 }
 
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:16px;
-  padding:18px;
+  padding:20px;
   margin-top:20px;
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  border-radius:10px;
-  padding:10px 14px;
-  font-weight:700;
-}
-
-.btn{
-  background:white;
-  color:#146c3f;
-}
-
-.player{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:10px;
-  cursor:pointer;
-}
-
-.player.active{
-  background:var(--card-selected);
-  border-color:white;
-}
-
-input{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  width:100%;
-  background:#0f5a35;
-  color:white;
 }
 
 .row{
@@ -95,16 +67,212 @@ input{
   gap:10px;
 }
 
+input,select{
+  padding:11px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#0f5a35;
+  color:white;
+  width:100%;
+  font-family:inherit;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+  border-radius:10px;
+  padding:11px 15px;
+  font-weight:800;
+  font-family:inherit;
+}
+
+.btn{
+  background:white;
+  color:#146c3f;
+}
+
+.btn-danger{
+  background:#b3261e;
+  color:white;
+}
+
+.btn-secondary{
+  background:#0d5233;
+  color:white;
+  border:1px solid var(--border);
+}
+
 .small{
   font-size:13px;
   color:var(--muted);
 }
 
+.player{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.player:hover{
+  background:rgba(255,255,255,.08);
+}
+
+.player.active{
+  background:var(--card-dark);
+  border-color:white;
+}
+
+.player-number{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  flex-shrink:0;
+}
+
+.player-name{
+  font-weight:700;
+}
+
+.player-status{
+  margin-left:auto;
+  font-size:12px;
+}
+
+.selected{
+  padding:14px;
+  border-radius:10px;
+  background:rgba(255,255,255,.08);
+  margin-top:15px;
+}
+
 .rank{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.1);
+  padding:14px 5px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.rank:last-child{
+  border-bottom:none;
+}
+
+.rank-position{
+  font-family:'JetBrains Mono',monospace;
+  width:45px;
+}
+
+.rank-name{
+  flex:1;
+  font-weight:700;
+}
+
+.rank-player{
+  flex:1;
+  color:var(--muted);
+}
+
+.rank-score{
+  width:90px;
+  text-align:right;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;
+}
+
+.positive{
+  color:#ffffff;
+}
+
+.negative{
+  color:#ffb3b3;
+}
+
+.match{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:12px;
+}
+
+.match-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.score-grid{
+  display:grid;
+  grid-template-columns:1fr 100px;
+  gap:8px;
+  align-items:center;
+}
+
+.score-grid input{
+  text-align:center;
+}
+
+.admin{
+  border:2px solid rgba(255,255,255,.35);
+}
+
+.hidden{
+  display:none !important;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:rgba(255,255,255,.1);
+  font-size:12px;
+  font-weight:700;
+}
+
+.gold{
+  color:var(--gold);
+}
+
+@media(max-width:650px){
+
+  .wrap{
+    padding:12px;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .row{
+    flex-direction:column;
+  }
+
+  .rank{
+    flex-wrap:wrap;
+    gap:5px;
+  }
+
+  .rank-player{
+    width:100%;
+    flex-basis:100%;
+    padding-left:45px;
+  }
+
+  .rank-score{
+    width:auto;
+  }
+
 }
 </style>
 </head>
@@ -115,190 +283,1076 @@ input{
 
 <header>
   <h1>FANTASY KOP 7</h1>
-  <div class="small">Version GitHub Pages corrigée</div>
+  <div class="small">
+    Limoges CSP — Saison 2026/2027
+  </div>
 </header>
 
+
+<!-- =========================
+     CONNEXION
+========================= -->
+
 <div class="card">
-  <h3>Connexion</h3>
+
+  <h3>👤 Participant</h3>
 
   <div class="row">
-    <input id="pseudo" placeholder="Ton pseudo">
-    <button class="btn" onclick="login()">OK</button>
+
+    <input
+      id="pseudo"
+      maxlength="30"
+      placeholder="Ton pseudo"
+      autocomplete="off"
+    >
+
+    <button
+      class="btn"
+      onclick="login()"
+    >
+      Se connecter
+    </button>
+
   </div>
 
-  <div id="user" class="small" style="margin-top:10px"></div>
+  <div
+    id="user"
+    class="small"
+    style="margin-top:10px"
+  ></div>
+
 </div>
 
+
+<!-- =========================
+     CHOIX
+========================= -->
+
 <div class="card">
-  <h3>Choisis ton joueur</h3>
+
+  <h3>🏀 Ton joueur</h3>
+
+  <div class="small">
+    Choisis le joueur dont tu veux suivre le +/-.
+  </div>
+
+  <br>
+
+  <input
+    id="search"
+    placeholder="🔎 Rechercher..."
+    oninput="renderPlayers()"
+  >
+
+  <br><br>
 
   <div id="players"></div>
+
+  <div
+    id="selected"
+    class="selected hidden"
+  ></div>
+
 </div>
+
+
+<!-- =========================
+     CLASSEMENT
+========================= -->
 
 <div class="card">
-  <h3>Classement</h3>
 
-  <div id="ranking"></div>
+  <h3>🏆 Classement</h3>
+
+  <div
+    id="ranking"
+  ></div>
+
 </div>
 
+
+<!-- =========================
+     HISTORIQUE MATCHS
+========================= -->
+
+<div class="card">
+
+  <h3>📊 Résultats des matchs</h3>
+
+  <div
+    id="matches"
+  ></div>
+
 </div>
+
+
+<!-- =========================
+     ADMIN LOGIN
+========================= -->
+
+<div class="card">
+
+  <h3>🔐 Administration</h3>
+
+  <div id="adminLogin">
+
+    <div class="row">
+
+      <input
+        type="password"
+        id="adminPassword"
+        placeholder="Mot de passe admin"
+      >
+
+      <button
+        class="btn"
+        onclick="adminLogin()"
+      >
+        Accéder
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+
+  <div
+    id="adminPanel"
+    class="hidden"
+  >
+
+    <div class="admin">
+
+      <h3>⚙️ Gestion des matchs</h3>
+
+      <div class="small">
+        Saisis le +/- de chaque joueur après chaque match.
+      </div>
+
+      <br>
+
+      <input
+        id="matchName"
+        placeholder="Nom du match — ex : J1 vs Monaco"
+      >
+
+      <br><br>
+
+      <div
+        id="scoreInputs"
+        class="score-grid"
+      ></div>
+
+      <br>
+
+      <button
+        class="btn"
+        onclick="saveMatch()"
+      >
+        💾 Enregistrer le match
+      </button>
+
+      <button
+        class="btn-secondary"
+        onclick="cancelAdmin()"
+        style="margin-left:5px"
+      >
+        Fermer
+      </button>
+
+    </div>
+
+    <br>
+
+    <h3>Historique administrateur</h3>
+
+    <div id="adminMatches"></div>
+
+  </div>
+
+</div>
+
+
+</div>
+
 
 <script>
 
-/* =========================
-   STORAGE FIX GITHUB PAGES
-========================= */
+/* =====================================================
+   CONFIGURATION
+===================================================== */
 
-if (!window.storage) {
-  window.storage = {
-    async get(key) {
-      const value = localStorage.getItem(key);
-      if (value === null) return null;
-      return { value };
-    },
-
-    async set(key, value) {
-      localStorage.setItem(key, value);
-      return true;
-    }
-  };
-}
-
-/* =========================
-   DATA
-========================= */
+const ADMIN_PASSWORD = "KOP7";
 
 const PLAYERS = [
+
   "Andrew Albicy",
-  "Tai Webster",
-  "D.J. Horne",
-  "Nicolas Lang",
+  "Jean-Fabrice Dossou",
+  "Clément Dubos",
+  "Mamadou Guisse",
+  "DJ Horne",
   "Hugo Invernizzi",
-  "Gavin Ware"
+  "Nicolas Lang",
+  "Louis Labeyrie",
+  "Noam Masdieu-Reynaert",
+  "Sidy Sene",
+  "Léon Stergar",
+  "Gavin Ware",
+  "Tai Webster"
+
 ];
 
-const state = {
-  user:"",
-  picks:{}
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const STORAGE_KEYS = {
+
+  user:"fk7-user",
+  picks:"fk7-picks",
+  matches:"fk7-matches"
+
 };
 
-/* =========================
+
+/* =====================================================
+   STATE
+===================================================== */
+
+const state = {
+
+  user:"",
+  picks:{},
+  matches:[],
+  admin:false
+
+};
+
+
+/* =====================================================
    INIT
-========================= */
+===================================================== */
 
-async function init(){
+function loadData(){
 
-  const user = await storage.get("fk7-user");
-  const picks = await storage.get("fk7-picks");
+  state.user =
+    localStorage.getItem(
+      STORAGE_KEYS.user
+    ) || "";
 
-  if(user){
-    state.user = user.value;
+
+  try{
+
+    state.picks =
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_KEYS.picks
+        ) || "{}"
+      );
+
+  }catch{
+
+    state.picks = {};
+
   }
 
-  if(picks){
-    state.picks = JSON.parse(picks.value);
+
+  try{
+
+    state.matches =
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_KEYS.matches
+        ) || "[]"
+      );
+
+  }catch{
+
+    state.matches = [];
+
   }
+
 
   render();
+
 }
 
-/* =========================
-   LOGIN
-========================= */
 
-async function login(){
+/* =====================================================
+   SAVE
+===================================================== */
 
-  const value = document.getElementById("pseudo").value.trim();
+function saveData(){
 
-  if(!value){
-    alert("Entre un pseudo");
-    return;
-  }
+  localStorage.setItem(
+    STORAGE_KEYS.user,
+    state.user
+  );
 
-  state.user = value;
-
-  await storage.set("fk7-user", value);
-
-  render();
-}
-
-/* =========================
-   PICK
-========================= */
-
-async function selectPlayer(name){
-
-  if(!state.user){
-    alert("Connecte-toi d'abord");
-    return;
-  }
-
-  state.picks[state.user] = name;
-
-  await storage.set(
-    "fk7-picks",
+  localStorage.setItem(
+    STORAGE_KEYS.picks,
     JSON.stringify(state.picks)
   );
 
+  localStorage.setItem(
+    STORAGE_KEYS.matches,
+    JSON.stringify(state.matches)
+  );
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login(){
+
+  const value =
+    document
+      .getElementById("pseudo")
+      .value
+      .trim();
+
+
+  if(!value){
+
+    alert("Entre un pseudo.");
+
+    return;
+
+  }
+
+
+  state.user = value;
+
+  saveData();
+
   render();
+
 }
 
-/* =========================
-   RENDER
-========================= */
 
-function render(){
+/* =====================================================
+   PLAYER SELECTION
+===================================================== */
 
-  document.getElementById("user").innerHTML =
-    state.user
-      ? `Connecté : <strong>${state.user}</strong>`
-      : "Non connecté";
+function selectPlayer(name){
 
-  renderPlayers();
-  renderRanking();
+  if(!state.user){
+
+    alert(
+      "Connecte-toi d'abord."
+    );
+
+    return;
+
+  }
+
+
+  state.picks[state.user] =
+    name;
+
+
+  saveData();
+
+  render();
+
 }
+
+
+/* =====================================================
+   PLAYER RENDER
+===================================================== */
 
 function renderPlayers(){
 
-  const currentPick = state.picks[state.user];
+  const container =
+    document.getElementById("players");
 
-  document.getElementById("players").innerHTML =
-    PLAYERS.map(p => `
-      <div
-        class="player ${currentPick === p ? 'active' : ''}"
-        onclick="selectPlayer('${p}')"
-      >
-        ${p}
-      </div>
-    `).join("");
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const currentPick =
+    state.picks[state.user];
+
+
+  const filtered =
+    PLAYERS.filter(player =>
+      player
+        .toLowerCase()
+        .includes(search)
+    );
+
+
+  container.innerHTML =
+    filtered.map(player => {
+
+      const index =
+        PLAYERS.indexOf(player);
+
+      const active =
+        player === currentPick;
+
+
+      return `
+
+        <div
+          class="player ${active ? "active" : ""}"
+          onclick="selectPlayer('${escapeAttr(player)}')"
+        >
+
+          <div class="player-number">
+            ${index + 1}
+          </div>
+
+          <div class="player-name">
+            ${escapeHTML(player)}
+          </div>
+
+          <div class="player-status">
+            ${active ? "✓ CHOISI" : ""}
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
 }
+
+
+/* =====================================================
+   SELECTED PLAYER
+===================================================== */
+
+function renderSelected(){
+
+  const element =
+    document.getElementById("selected");
+
+
+  const player =
+    state.picks[state.user];
+
+
+  if(!player){
+
+    element.classList.add("hidden");
+
+    return;
+
+  }
+
+
+  const score =
+    calculatePlayerScore(player);
+
+
+  element.classList.remove("hidden");
+
+
+  element.innerHTML = `
+
+    <div class="small">
+      TON JOUEUR
+    </div>
+
+    <strong>
+      ${escapeHTML(player)}
+    </strong>
+
+    <br><br>
+
+    <span class="${
+      score >= 0
+        ? "positive"
+        : "negative"
+    }">
+
+      +/- cumulé :
+      <strong>
+        ${formatScore(score)}
+      </strong>
+
+    </span>
+
+  `;
+
+}
+
+
+/* =====================================================
+   CALCUL SCORE JOUEUR
+===================================================== */
+
+function calculatePlayerScore(player){
+
+  let total = 0;
+
+
+  state.matches.forEach(match => {
+
+    if(
+      match.scores &&
+      typeof match.scores[player] === "number"
+    ){
+
+      total +=
+        match.scores[player];
+
+    }
+
+  });
+
+
+  return total;
+
+}
+
+
+/* =====================================================
+   CLASSEMENT
+===================================================== */
 
 function renderRanking(){
 
-  const entries = Object.entries(state.picks);
+  const container =
+    document.getElementById("ranking");
+
+
+  const entries =
+    Object.entries(state.picks);
+
 
   if(entries.length === 0){
-    document.getElementById("ranking").innerHTML =
-      `<div class="small">Aucun joueur enregistré</div>`;
+
+    container.innerHTML =
+      `<div class="small">
+        Aucun participant pour le moment.
+      </div>`;
+
     return;
+
   }
 
-  document.getElementById("ranking").innerHTML =
-    entries.map(([user,pick],i)=>`
+
+  const ranking =
+    entries.map(([user,player]) => ({
+
+      user:user,
+      player:player,
+      score:calculatePlayerScore(player)
+
+    }))
+    .sort((a,b) =>
+      b.score - a.score
+    );
+
+
+  container.innerHTML =
+    ranking.map((entry,index)=>`
+
       <div class="rank">
-        <strong>#${i+1} ${user}</strong>
-        <span>${pick}</span>
+
+        <div class="rank-position">
+          ${getMedal(index)}
+        </div>
+
+        <div class="rank-name">
+          ${escapeHTML(entry.user)}
+        </div>
+
+        <div class="rank-player">
+          ${escapeHTML(entry.player)}
+        </div>
+
+        <div
+          class="rank-score ${
+            entry.score >= 0
+              ? "positive"
+              : "negative"
+          }"
+        >
+          ${formatScore(entry.score)}
+        </div>
+
       </div>
+
     `).join("");
+
 }
 
-/* =========================
-   START
-========================= */
 
-init();
+/* =====================================================
+   MATCHES
+===================================================== */
+
+function renderMatches(){
+
+  const container =
+    document.getElementById("matches");
+
+
+  if(state.matches.length === 0){
+
+    container.innerHTML =
+      `<div class="small">
+        Aucun match enregistré.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    [...state.matches]
+      .reverse()
+      .map((match,index)=>`
+
+        <div class="match">
+
+          <div class="match-header">
+
+            <strong>
+              ${escapeHTML(match.name)}
+            </strong>
+
+            <span class="badge">
+              ${formatDate(match.date)}
+            </span>
+
+          </div>
+
+          <div class="small">
+
+            ${PLAYERS.map(player => {
+
+              const score =
+                match.scores[player] ?? 0;
+
+              return `
+
+                <div style="
+                  display:flex;
+                  justify-content:space-between;
+                  padding:5px 0;
+                ">
+
+                  <span>
+                    ${escapeHTML(player)}
+                  </span>
+
+                  <strong>
+                    ${formatScore(score)}
+                  </strong>
+
+                </div>
+
+              `;
+
+            }).join("")}
+
+          </div>
+
+        </div>
+
+      `).join("");
+
+}
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+function adminLogin(){
+
+  const password =
+    document
+      .getElementById("adminPassword")
+      .value;
+
+
+  if(password !== ADMIN_PASSWORD){
+
+    alert("Mot de passe incorrect.");
+
+    return;
+
+  }
+
+
+  state.admin = true;
+
+
+  document
+    .getElementById("adminLogin")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("adminPanel")
+    .classList.remove("hidden");
+
+
+  renderAdminScores();
+
+  renderAdminMatches();
+
+}
+
+
+/* =====================================================
+   ADMIN SCORE INPUTS
+===================================================== */
+
+function renderAdminScores(){
+
+  const container =
+    document.getElementById("scoreInputs");
+
+
+  container.innerHTML =
+    PLAYERS.map(player => `
+
+      <label>
+        ${escapeHTML(player)}
+      </label>
+
+      <input
+        type="number"
+        step="1"
+        id="score-${slugify(player)}"
+        placeholder="+/-"
+      >
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   SAVE MATCH
+===================================================== */
+
+function saveMatch(){
+
+  const name =
+    document
+      .getElementById("matchName")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    alert(
+      "Donne un nom au match."
+    );
+
+    return;
+
+  }
+
+
+  const scores = {};
+
+
+  PLAYERS.forEach(player => {
+
+    const input =
+      document.getElementById(
+        "score-" + slugify(player)
+      );
+
+
+    const value =
+      input.value.trim();
+
+
+    if(value === ""){
+
+      scores[player] = 0;
+
+    }
+    else{
+
+      scores[player] =
+        Number(value);
+
+    }
+
+  });
+
+
+  state.matches.push({
+
+    id:Date.now(),
+
+    name:name,
+
+    date:new Date().toISOString(),
+
+    scores:scores
+
+  });
+
+
+  saveData();
+
+
+  document
+    .getElementById("matchName")
+    .value = "";
+
+
+  renderAdminScores();
+
+  renderAdminMatches();
+
+  render();
+
+
+  alert(
+    "Match enregistré."
+  );
+
+}
+
+
+/* =====================================================
+   ADMIN MATCH HISTORY
+===================================================== */
+
+function renderAdminMatches(){
+
+  const container =
+    document.getElementById("adminMatches");
+
+
+  if(state.matches.length === 0){
+
+    container.innerHTML =
+      `<div class="small">
+        Aucun match.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    [...state.matches]
+      .reverse()
+      .map(match=>`
+
+        <div class="match">
+
+          <div class="match-header">
+
+            <strong>
+              ${escapeHTML(match.name)}
+            </strong>
+
+            <button
+              class="btn-danger"
+              onclick="deleteMatch(${match.id})"
+            >
+              Supprimer
+            </button>
+
+          </div>
+
+          <div class="small">
+            ${formatDate(match.date)}
+          </div>
+
+        </div>
+
+      `).join("");
+
+}
+
+
+/* =====================================================
+   DELETE MATCH
+===================================================== */
+
+function deleteMatch(id){
+
+  if(
+    !confirm(
+      "Supprimer définitivement ce match ?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  state.matches =
+    state.matches.filter(
+      match => match.id !== id
+    );
+
+
+  saveData();
+
+  renderAdminMatches();
+
+  render();
+
+}
+
+
+/* =====================================================
+   CLOSE ADMIN
+===================================================== */
+
+function cancelAdmin(){
+
+  state.admin = false;
+
+
+  document
+    .getElementById("adminPanel")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("adminLogin")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("adminPassword")
+    .value = "";
+
+}
+
+
+/* =====================================================
+   GLOBAL RENDER
+===================================================== */
+
+function render(){
+
+  document
+    .getElementById("user")
+    .innerHTML =
+      state.user
+        ? `Connecté : <strong>${escapeHTML(state.user)}</strong>`
+        : "Non connecté";
+
+
+  renderPlayers();
+
+  renderSelected();
+
+  renderRanking();
+
+  renderMatches();
+
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function formatScore(score){
+
+  if(score > 0){
+
+    return "+" + score;
+
+  }
+
+  return String(score);
+
+}
+
+
+function formatDate(date){
+
+  return new Date(date)
+    .toLocaleDateString(
+      "fr-FR",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+
+}
+
+
+function getMedal(index){
+
+  if(index === 0) return "🥇";
+
+  if(index === 1) return "🥈";
+
+  if(index === 2) return "🥉";
+
+  return "#" + (index + 1);
+
+}
+
+
+function slugify(value){
+
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-zA-Z0-9]/g,"-");
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return String(value)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadData();
 
 </script>
 
 </body>
 </html>
+```
