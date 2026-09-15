@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>V1.0 DB TEST 4.1 - Fantasy Kop 7</title>
+<title>V1.0 DB TEST 4.2 - Fantasy Kop 7</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -3094,6 +3094,20 @@ async function toggleBonus(type){
   }
 
   if(type==="videoJeanMarc"){
+    const latestStarted=getLatestStartedMatch();
+    const latestOpenAt=latestStarted ? getJeanMarcOpenDate(latestStarted) : null;
+
+    if(!latestStarted || !latestOpenAt || new Date()<latestOpenAt){
+      showToast(
+        "🔒 Vidéo Jean-Marc verrouillée",
+        latestOpenAt
+          ? `Disponible à partir du ${formatDateTimeShort(latestOpenAt)}.`
+          : "Disponible uniquement après la fin du match."
+      );
+      render();
+      return;
+    }
+
     const match=getLatestJeanMarcEligibleMatch();
     if(!match){alert("Vidéo Jean-Marc n'est disponible qu'après la fin du match.");return;}
     const pick=getPickForMatch(state.user,match);
@@ -4339,9 +4353,10 @@ function renderBonuses(){
             <input
               type="checkbox"
               ${jeanMarcActive ? "checked" : ""}
+              ${jeanMarcUsedSeason && !jeanMarcActive ? "disabled" : ""}
               onclick="
                 event.stopPropagation();
-                toggleBonus('videoJeanMarc')
+                if(!this.disabled) toggleBonus('videoJeanMarc')
               "
             >
 
@@ -6081,32 +6096,24 @@ function getLatestStartedMatch(){
 }
 
 function getLatestJeanMarcEligibleMatch(){
-  const now = new Date();
+  const now=new Date();
 
-  const latestStartedMatch =
-    [...(state.matches || [])]
-      .filter(match =>
-        match &&
-        match.start &&
-        new Date(match.start) <= now
-      )
-      .sort((a,b) =>
-        new Date(b.start) - new Date(a.start)
-      )[0] || null;
+  const latestStartedMatch=[...(state.matches||[])]
+    .filter(match=>match && match.start && new Date(match.start)<=now)
+    .sort((a,b)=>new Date(b.start)-new Date(a.start))[0] || null;
 
-  if(!latestStartedMatch){
-    return null;
-  }
+  if(!latestStartedMatch) return null;
 
-  const openAt =
-    getJeanMarcOpenDate(latestStartedMatch);
+  const openAt=getJeanMarcOpenDate(latestStartedMatch);
 
-  if(!openAt || now < openAt){
-    return null;
-  }
+  // Verrou absolu côté IHM jusqu'à l'heure de fin / ouverture
+  // programmée dans l'admin pour CE match.
+  if(!openAt || now<openAt) return null;
 
   return latestStartedMatch;
 }
+
+
 
 
 
