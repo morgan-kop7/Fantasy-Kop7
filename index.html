@@ -3124,82 +3124,26 @@ let rankingHistoryMatchId = null;
 
 async function loadData(){
 
-  state.users = read(KEYS.users,{});
-  state.picks = read(KEYS.picks,{});
-  state.pronos = read(KEYS.pronos,{});
-  state.bonuses = read(KEYS.bonuses,{});
-  state.matches = read(KEYS.matches,[]);
-  state.feedback = read(KEYS.feedback,{});
-  state.winnerMessages = read(KEYS.winnerMessages,{});
+  // Saison officielle 2026-2027 :
+  // les données de jeu proviennent uniquement des tables Supabase normalisées.
+  // On ne recharge plus les anciennes données fk7_store/localStorage.
+  state.users = {};
+  state.picks = {};
+  state.pronos = {};
+  state.bonuses = {};
+  state.matches = [];
+  state.feedback = {};
+  state.winnerMessages = {};
+
+  remoteDataReady = true;
+
+  if(authUser){
+    await loadSecureExtras();
+    await loadSecureGameData();
+  }
 
   render();
-
-  remoteDataLoading = (async () => {
-
-    try{
-
-      const { data, error } = await db
-        .from("fk7_store")
-        .select("key,value")
-        .in("key", Array.from(SHARED_KEYS));
-
-      if(error) throw error;
-
-      const remote = {};
-
-      (data || []).forEach(
-        row => remote[row.key] = row.value
-      );
-
-      state.users = remote[KEYS.users] ?? state.users;
-      state.picks = remote[KEYS.picks] ?? state.picks;
-      state.pronos = remote[KEYS.pronos] ?? state.pronos;
-      state.bonuses = remote[KEYS.bonuses] ?? state.bonuses;
-      state.matches = remote[KEYS.matches] ?? state.matches;
-      state.feedback = remote[KEYS.feedback] ?? state.feedback;
-      state.winnerMessages = remote[KEYS.winnerMessages] ?? state.winnerMessages;
-
-      localStorage.setItem(KEYS.users, JSON.stringify(state.users));
-      localStorage.setItem(KEYS.picks, JSON.stringify(state.picks));
-      localStorage.setItem(KEYS.pronos, JSON.stringify(state.pronos));
-      localStorage.setItem(KEYS.bonuses, JSON.stringify(state.bonuses));
-      localStorage.setItem(KEYS.matches, JSON.stringify(state.matches));
-      localStorage.setItem(KEYS.feedback, JSON.stringify(state.feedback));
-      localStorage.setItem(KEYS.winnerMessages, JSON.stringify(state.winnerMessages));
-
-      remoteDataReady = true;
-
-      if(authUser){
-        await loadSecureGameData();
-        await loadSecureExtras();
-      }
-
-      render();
-
-      return true;
-
-    }catch(err){
-
-      console.error("Supabase load error:", err);
-
-      remoteDataReady = false;
-
-      const userEl =
-        document.getElementById("user");
-
-      if(userEl){
-        userEl.innerHTML +=
-          '<br><span style="color:#ffd7d7">⚠️ Mode local : connexion Supabase impossible.</span>';
-      }
-
-      return false;
-
-    }
-
-  })();
-
-  return remoteDataLoading;
-
+  return true;
 }
 
 
@@ -3810,22 +3754,11 @@ async function ensureLegacyUserReference(){
     return;
   }
 
-  state.users[state.user] =
-    state.users[state.user] || "AUTH";
-
-  const result =
-    await writeUserBranch(
-      KEYS.users,
-      state.user,
-      "AUTH"
-    );
-
-  if(!result.ok){
-    console.warn(
-      "Impossible d'ajouter le pseudo Auth au stockage historique."
-    );
-  }
+  // Compatibilité interne de l'UI uniquement.
+  // La liste réelle des utilisateurs est public.profiles.
+  state.users[state.user] = "AUTH";
 }
+
 
 
 async function bootstrapAuth(){
@@ -7744,8 +7677,7 @@ function escapeJSString(value){
 
 async function refreshAdminUsers(){
 
-  const container =
-    document.getElementById("adminUsers");
+  const container = document.getElementById("adminUsers");
 
   if(container){
     container.innerHTML =
@@ -7755,35 +7687,20 @@ async function refreshAdminUsers(){
   try{
 
     const { data, error } = await db
-      .from("fk7_store")
-      .select("key,value")
-      .in("key", [KEYS.users, KEYS.picks]);
+      .from("profiles")
+      .select("id,pseudo,is_admin,created_at")
+      .order("created_at");
 
     if(error) throw error;
 
-    if(Array.isArray(data)){
+    state.users = {};
+    state.profileCreatedAtByPseudo = {};
 
-      data.forEach(row => {
-
-        if(row.key === KEYS.users){
-          state.users = row.value || {};
-          localStorage.setItem(
-            KEYS.users,
-            JSON.stringify(state.users)
-          );
-        }
-
-        if(row.key === KEYS.picks){
-          state.picks = row.value || {};
-          localStorage.setItem(
-            KEYS.picks,
-            JSON.stringify(state.picks)
-          );
-        }
-
-      });
-
-    }
+    (data || []).forEach(profile => {
+      if(!profile.pseudo) return;
+      state.users[profile.pseudo] = "AUTH";
+      state.profileCreatedAtByPseudo[profile.pseudo] = profile.created_at || null;
+    });
 
     renderAdminUsers();
     renderHistoricalPickEditor();
@@ -7795,24 +7712,13 @@ async function refreshAdminUsers(){
 
   }catch(error){
 
-    console.error(
-      "Admin users refresh error:",
-      error
-    );
+    console.error("Admin users refresh error:", error);
 
     if(container){
       container.innerHTML =
         '<div class="small" style="color:#ffd7d7">⚠️ Impossible de charger les utilisateurs depuis Supabase.</div>';
     }
-
-    showToast(
-      "⚠️ Chargement impossible",
-      "Vérifie la connexion Supabase.",
-      "error"
-    );
-
   }
-
 }
 
 
@@ -8503,8 +8409,8 @@ async function loadSecureGameData(){
     db.from("matches").select("id,legacy_id,legacy_name,opponent,venue,start_at,choices_open_at,video_jean_marc_open_at,csp_score,opponent_score,is_cancelled,csp_image_url,opponent_image_url").order("start_at"),
     db.from("players").select("id,name,image_url,active,display_order").order("display_order"),
     db.from("player_match_scores").select("match_id,player_id,plus_minus,did_play"),
-    db.from("picks").select("match_id,starter_player_id,joker_player_id").eq("user_id",authUser.id),
-    db.from("pronos").select("match_id,predicted_csp_score,predicted_opponent_score").eq("user_id",authUser.id)
+    db.from("picks").select("user_id,match_id,starter_player_id,joker_player_id"),
+    db.from("pronos").select("user_id,match_id,predicted_csp_score,predicted_opponent_score")
   ]);
 
   const err=[mr.error,plr.error,sr.error,pkr.error,prr.error].find(Boolean);
@@ -8554,45 +8460,39 @@ async function loadSecureGameData(){
 
   const matchesByUuid=Object.fromEntries(state.matches.map(m=>[String(m.secureId),m]));
 
-  const securePickByMatch=Object.fromEntries((pkr.data||[]).map(row=>[
-    String(row.match_id),
-    {
-      starter:playersById[String(row.starter_player_id)]?.name||null,
-      joker:playersById[String(row.joker_player_id)]?.name||null
-    }
-  ]));
-  const securePronoByMatch=Object.fromEntries((prr.data||[]).map(row=>[
-    String(row.match_id),
-    {
-      csp:row.predicted_csp_score,
-      opponent:row.predicted_opponent_score
-    }
-  ]));
-  state.secureUserHistory=state.matches.map(m=>({
-    match:m,
-    pick:securePickByMatch[String(m.secureId)]||null,
-    prono:securePronoByMatch[String(m.secureId)]||null
-  }));
+  const pseudoByUserId = Object.fromEntries(
+    Object.entries(state.profileIdByPseudo || {}).map(([pseudo,id]) => [String(id),pseudo])
+  );
 
-  state.picks[state.user]={};
+  state.picks = {};
   for(const row of pkr.data||[]){
     const m=matchesByUuid[String(row.match_id)];
-    if(!m) continue;
-    state.picks[state.user][String(m.id)]={
+    const pseudo=pseudoByUserId[String(row.user_id)];
+    if(!m || !pseudo) continue;
+    state.picks[pseudo] = state.picks[pseudo] || {};
+    state.picks[pseudo][String(m.id)]={
       starter:playersById[String(row.starter_player_id)]?.name||null,
       joker:row.joker_player_id?playersById[String(row.joker_player_id)]?.name||null:null
     };
   }
 
-  state.pronos[state.user]={};
+  state.pronos = {};
   for(const row of prr.data||[]){
     const m=matchesByUuid[String(row.match_id)];
-    if(!m) continue;
-    state.pronos[state.user][String(m.id)]={
+    const pseudo=pseudoByUserId[String(row.user_id)];
+    if(!m || !pseudo) continue;
+    state.pronos[pseudo] = state.pronos[pseudo] || {};
+    state.pronos[pseudo][String(m.id)]={
       csp:Number(row.predicted_csp_score),
       opponent:Number(row.predicted_opponent_score)
     };
   }
+
+  state.secureUserHistory=state.matches.map(m=>({
+    match:m,
+    pick:state.picks[state.user]?.[String(m.id)]||null,
+    prono:state.pronos[state.user]?.[String(m.id)]||null
+  }));
 }
 
 function secureMatchFromLegacyId(id){
@@ -8645,7 +8545,7 @@ async function loadSecureExtras(){
   if(!authUser) return;
 
   const [br,fr,profilesRes,bonusDefsRes]=await Promise.all([
-    db.from("bonuses").select("match_id,season,bonus_type,activated_at").eq("user_id",authUser.id),
+    db.from("bonuses").select("user_id,match_id,season,bonus_type,activated_at"),
     db.from("feedback").select("id,user_id,rating,message,published,created_at").order("created_at",{ascending:false}),
     db.from("profiles").select("id,pseudo,created_at"),
     db.from("bonus_definitions").select("*").order("name")
@@ -8658,13 +8558,37 @@ async function loadSecureExtras(){
   state.secureBonuses=br.data||[];
   state.bonusDefinitions=bonusDefsRes.data||[];
   const pseudoById=Object.fromEntries((profilesRes.data||[]).map(p=>[String(p.id),p.pseudo]));
+  state.profileIdByPseudo=Object.fromEntries((profilesRes.data||[]).map(p=>[p.pseudo,String(p.id)]));
   state.profileCreatedAtByPseudo=Object.fromEntries((profilesRes.data||[]).map(p=>[p.pseudo,p.created_at||null]));
+
+  state.users={};
+  (profilesRes.data||[]).forEach(p=>{
+    if(p.pseudo) state.users[p.pseudo]="AUTH";
+  });
+
   state.secureFeedback=(fr.data||[]).map(item=>({
     ...item,
     pseudo:pseudoById[String(item.user_id)] || "Utilisateur"
   }));
 
-  const mine=state.secureBonuses;
+  state.bonuses={};
+  for(const row of state.secureBonuses){
+    const pseudo=pseudoById[String(row.user_id)];
+    const match=(state.matches||[]).find(m=>String(m.secureId)===String(row.match_id));
+    if(!pseudo) continue;
+    state.bonuses[pseudo]=state.bonuses[pseudo]||{};
+    if(row.bonus_type==="video_jean_marc"){
+      state.bonuses[pseudo].videoJeanMarcUsed=true;
+      state.bonuses[pseudo].videoJeanMarcByMatch=state.bonuses[pseudo].videoJeanMarcByMatch||{};
+      if(match) state.bonuses[pseudo].videoJeanMarcByMatch[match.id]=true;
+      if(match) state.bonuses[pseudo].videoJeanMarcMatchId=match.id;
+    }else if(row.bonus_type==="cocu"){
+      state.bonuses[pseudo].cocu=true;
+      if(match) state.bonuses[pseudo].cocuMatchId=match.id;
+    }
+  }
+
+  const mine=state.secureBonuses.filter(x=>String(x.user_id)===String(authUser.id));
   state.bonuses[state.user]=state.bonuses[state.user]||{};
   state.bonuses[state.user].videoJeanMarcUsed=mine.some(x=>x.bonus_type==="video_jean_marc");
   state.bonuses[state.user].cocu=mine.some(x=>x.bonus_type==="cocu");
