@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>V1.0 RC.2 - Fantasy Kop 7</title>
+<!-- DB TEST 33 - corrective globale BUG-01..06 + responsive mobile -->
+<title>V1.0 DB TEST 29 - Fantasy Kop 7</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
@@ -1078,6 +1079,1260 @@ button{
 }
 </style>
 
+
+<style>
+#authEmail,
+#authPassword,
+#authPseudo{
+  margin-bottom:8px;
+}
+</style>
+
+
+<style>
+.auth-card{max-width:460px;padding:18px 20px}
+.auth-card h3{margin:0 0 14px}
+.auth-card input{display:block;width:100%;margin:0 0 9px;box-sizing:border-box}
+.auth-main-btn{width:100%;margin-top:2px}
+.auth-link{display:block;width:100%;border:0;background:transparent;padding:11px 4px 2px;cursor:pointer;text-align:center;font:inherit;font-size:.92rem;text-decoration:none;opacity:.92}
+#loginPanel .auth-link{color:#ff9f1c;font-weight:800}
+#loginPanel .auth-link:hover{color:#ffb347;opacity:1}
+.auth-link:hover{opacity:1;text-decoration:none}
+.auth-session{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+body.authenticated #loginMode,body.authenticated #signupMode{display:none!important}
+body.authenticated .auth-card{padding:10px 14px;max-width:none}
+body.authenticated .auth-session{margin-top:0}
+</style>
+
+
+<style>
+/* Bonus : alignement ISO sans chevauchement avec les images */
+.bonus{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+.bonus > img{
+  flex:0 0 auto!important;
+}
+.bonus > div{
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+.bonus > input[type="checkbox"]{
+  flex:0 0 20px!important;
+  width:20px!important;
+  height:20px!important;
+  margin:0 4px 0 0!important;
+  position:static!important;
+  transform:none!important;
+  order:3!important;
+}
+@media(max-width:640px){
+  .bonus{gap:9px!important}
+}
+}
+</style>
+
+
+<style>
+.admin-player-manager{display:grid;grid-template-columns:1.4fr 2fr .6fr auto;gap:8px;align-items:center;margin-top:10px}
+.admin-roster-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(127,127,127,.18)}
+.admin-roster-row img{width:42px;height:42px;object-fit:cover;border-radius:8px}
+.admin-roster-row .grow{flex:1}
+@media(max-width:760px){.admin-player-manager{grid-template-columns:1fr}.admin-roster-row{flex-wrap:wrap}}
+</style>
+
+
+<style>
+.postmatch-bonus-card{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 16px;margin:0 0 16px;border:1px solid rgba(127,127,127,.22);
+  border-radius:12px;
+}
+.postmatch-bonus-card > div{min-width:0}
+.postmatch-bonus-card .btn{flex:0 0 auto}
+@media(max-width:640px){
+  .postmatch-bonus-card{align-items:flex-start;flex-direction:column}
+}
+</style>
+
+
+<style>
+.admin-bonus-manager{display:grid;grid-template-columns:1.2fr 1fr 1.6fr .7fr 1fr;gap:8px;align-items:start}
+.admin-bonus-manager textarea{grid-column:1/-1;min-height:70px}
+.user-history-row{padding:12px 0;border-bottom:1px solid rgba(127,127,127,.18)}
+.user-history-row:last-child{border-bottom:0}
+@media(max-width:760px){.admin-bonus-manager{grid-template-columns:1fr}}
+</style>
+
+
+<style>
+.admin-subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;position:sticky;top:0;z-index:5;padding:8px 0}
+.admin-subtab{border:0;border-radius:999px;padding:9px 13px;cursor:pointer;font:inherit}
+.admin-subtab.active{font-weight:700;box-shadow:0 0 0 2px currentColor inset}
+.history-empty{opacity:.62}
+</style>
+
+
+<style>
+.fantasy-subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.fantasy-subtab{border:0;border-radius:999px;padding:9px 13px;cursor:pointer;font:inherit}
+.fantasy-subtab.active{font-weight:700;box-shadow:0 0 0 2px currentColor inset}
+.bonus-config-warning{margin-top:7px;font-style:italic}
+</style>
+
+
+
+
+<style id="fk7-db11-ui">
+/* ==================================================
+   V1 UI — homogénéisation sur le langage visuel Résultats
+   Palette historique KOP 7 conservée
+================================================== */
+:root{
+  --bg:#063d25;
+  --card:#075a34;
+  --dark:#032d1b;
+  --border:#0a7441;
+  --white:#fff;
+  --muted:#cfe9da;
+  --kop-green:#048444;
+}
+
+/* Typographie : Anton uniquement pour la marque, Inter pour toute l'application */
+body{background:var(--bg)!important;color:var(--white)!important;font-family:'Inter',sans-serif!important}
+h1{font-family:'Anton',sans-serif!important}
+h2,h3,h4{font-family:'Inter',sans-serif!important;color:#fff!important;font-weight:800!important;letter-spacing:-.01em}
+.small,label{color:var(--muted)!important}
+p{line-height:1.55}
+
+/* Même largeur et même rythme vertical partout */
+.wrap{max-width:1000px!important;padding:20px!important}
+section>.card,#tab-admin>.card{margin-top:20px!important}
+.card{
+  background:var(--card)!important;
+  border:1px solid var(--border)!important;
+  border-radius:16px!important;
+  padding:20px!important;
+  box-shadow:none!important;
+}
+.info{
+  background:rgba(3,45,27,.42)!important;
+  border:1px solid var(--border)!important;
+  border-radius:10px!important;
+  color:var(--muted)!important;
+}
+
+/* Navigation : proche du design historique, plus régulière */
+.tabs{gap:8px!important;margin-top:20px!important;padding:0!important;background:transparent!important;border:0!important}
+.tab{
+  background:var(--dark)!important;color:white!important;border:1px solid var(--border)!important;
+  border-radius:10px!important;padding:11px 15px!important;font-weight:800!important;
+}
+.tab.active{background:white!important;color:var(--bg)!important}
+.tab:hover{border-color:#2bd477!important}
+
+/* Boutons cohérents */
+.btn{
+  background:white!important;color:var(--kop-green)!important;border:0!important;
+  border-radius:10px!important;padding:11px 15px!important;font-weight:800!important;
+}
+.btn-secondary{
+  background:var(--dark)!important;color:white!important;border:1px solid var(--border)!important;
+  border-radius:10px!important;padding:10px 14px!important;font-weight:750!important;
+}
+.btn-danger{border-radius:10px!important}
+.btn:hover,.btn-secondary:hover{filter:brightness(1.05)}
+button:disabled{opacity:.48!important}
+
+/* Formulaires identiques dans Pronostic / Fantasy / Admin */
+input,select,textarea{
+  background:#054a2c!important;color:#fff!important;border:1px solid var(--border)!important;
+  border-radius:10px!important;padding:11px!important;font-family:'Inter',sans-serif!important;
+}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(43,212,119,.35)!important;outline-offset:1px}
+input::placeholder,textarea::placeholder{color:#cfe9da!important;opacity:.72}
+
+/* Sous-onglets = vraie navigation secondaire, pas une série de CTA */
+.admin-subtabs,.fantasy-subtabs{
+  display:flex!important;gap:6px!important;flex-wrap:wrap!important;
+  margin:16px 0!important;padding:5px!important;
+  background:var(--dark)!important;border:1px solid var(--border)!important;border-radius:12px!important;
+  width:max-content;max-width:100%;
+}
+.admin-subtab,.fantasy-subtab{
+  background:transparent!important;color:var(--muted)!important;border:0!important;
+  border-radius:8px!important;padding:9px 12px!important;font-weight:700!important;
+}
+.admin-subtab.active,.fantasy-subtab.active{
+  background:var(--card)!important;color:#fff!important;box-shadow:inset 0 0 0 1px var(--border)!important;
+}
+
+/* Tous les contenus principaux reprennent le traitement de Résultats */
+#tab-fantasy>.card,#tab-prono>.card,#tab-classement>.card,#tab-resultats>.card,
+#tab-connexion>.card,#tab-admin>.card{
+  background:var(--card)!important;border:1px solid var(--border)!important;
+}
+#tab-fantasy h3,#tab-prono h3,#tab-classement h3,#tab-resultats h3,
+#tab-connexion h3,#tab-admin h3{margin-bottom:14px!important}
+
+/* Cartes de choix */
+.player,.bonus,.postmatch-bonus-card,.user-history-row{
+  background:rgba(3,45,27,.36)!important;border:1px solid var(--border)!important;
+  border-radius:12px!important;box-shadow:none!important;
+}
+.player.selected,.bonus.active{border-color:#2bd477!important;background:rgba(4,132,68,.34)!important}
+.player:hover,.bonus:hover{border-color:#2bd477!important}
+.player img,.bonus img{border-radius:10px!important}
+
+/* Profil */
+body.authenticated .auth-card{max-width:none!important;padding:20px!important}
+body.authenticated .auth-session{
+  margin:0!important;padding-bottom:14px!important;border-bottom:1px solid var(--border)!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;
+}
+#userHistory{margin-top:18px!important}
+.user-history-row{padding:13px 14px!important;margin-top:8px!important}
+.user-history-row.history-empty{opacity:.58}
+
+/* Admin : une catégorie = ses fonctions */
+#adminPanel>.card{margin-top:12px!important}
+#adminPanel>.card>.card{background:rgba(3,45,27,.25)!important}
+.admin-player-manager,.admin-bonus-manager{
+  background:rgba(3,45,27,.28)!important;border:1px solid var(--border)!important;
+  border-radius:12px!important;padding:14px!important;
+}
+.admin-roster-row{border-bottom:1px solid var(--border)!important;padding:11px 2px!important}
+.admin-roster-row:last-child{border-bottom:0!important}
+
+/* Tableaux / classement / résultats */
+table{border-collapse:separate!important;border-spacing:0!important;width:100%}
+th{color:var(--muted)!important;font-weight:700!important}
+td,th{border-bottom:1px solid rgba(10,116,65,.75)!important;padding:10px!important}
+tr:last-child td{border-bottom:0!important}
+
+/* Footer identique à la palette historique */
+footer{border-top:1px solid var(--border)!important}
+footer a{color:var(--muted)!important;text-decoration:none!important}
+footer a:hover{color:#fff!important}
+
+/* Mobile */
+@media(max-width:700px){
+  .wrap{padding:14px!important}
+  .tabs{width:100%!important}
+  .admin-subtabs,.fantasy-subtabs{width:100%!important;flex-wrap:nowrap!important;overflow-x:auto!important}
+  .card{padding:15px!important}
+  body.authenticated .auth-session{align-items:flex-start!important;flex-direction:column!important}
+}
+</style>
+
+
+<style id="fk7-court-ui">
+/* Terrain Fantasy — cohérent avec la charte KOP 7 */
+.basket-court-wrap{
+  width:100%;
+  overflow-x:auto;
+  padding:4px 0 8px;
+}
+.basket-court{
+  position:relative;
+  width:100%;
+  min-width:760px;
+  aspect-ratio:1.9/1;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,.82);
+  border-radius:13px;
+  background:#075a34;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);
+}
+.basket-court:before{
+  content:"";
+  position:absolute;inset:10px;
+  border:2px solid rgba(255,255,255,.66);
+  border-radius:4px;
+  pointer-events:none;
+}
+.court-half-line{
+  position:absolute;left:50%;top:10px;bottom:10px;width:2px;
+  background:rgba(255,255,255,.66);transform:translateX(-50%);
+}
+.court-center-circle{
+  position:absolute;left:50%;top:50%;width:17%;aspect-ratio:1/1;
+  border:2px solid rgba(255,255,255,.66);border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+.court-key{
+  position:absolute;top:31%;height:38%;width:15%;
+  border:2px solid rgba(255,255,255,.66);
+}
+.court-key-left{left:10px;border-left:0}
+.court-key-right{right:10px;border-right:0}
+.court-hoop{
+  position:absolute;top:50%;width:18px;height:18px;
+  border:2px solid #f29a2e;border-radius:50%;transform:translateY(-50%);
+}
+.court-hoop-left{left:8%}.court-hoop-right{right:8%}
+.court-arc{
+  position:absolute;top:18%;height:64%;width:25%;
+  border:2px solid rgba(255,255,255,.66);border-radius:50%;
+}
+.court-arc-left{left:-12%;border-left-color:transparent}
+.court-arc-right{right:-12%;border-right-color:transparent}
+
+/* Joueurs */
+.court-player{
+  position:absolute;
+  width:112px;
+  transform:translate(-50%,-50%);
+  padding:0!important;margin:0;
+  border:0!important;background:transparent!important;
+  color:white!important;box-shadow:none!important;
+  display:flex;flex-direction:column;align-items:center;
+  z-index:3;
+}
+.court-player:hover:not(:disabled){transform:translate(-50%,-50%) scale(1.04)}
+.court-player:disabled{cursor:not-allowed;opacity:.58}
+.court-photo-wrap{
+  position:relative;display:block;width:70px;height:70px;
+  border-radius:50%;border:3px solid rgba(255,255,255,.8);
+  background:#032d1b;box-shadow:0 4px 10px rgba(0,0,0,.24);
+}
+.court-player-photo{
+  width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;
+}
+.court-player.selected .court-photo-wrap{
+  border:4px solid #f39a24;
+  box-shadow:0 0 0 3px rgba(243,154,36,.18),0 5px 12px rgba(0,0,0,.3);
+}
+.court-check{
+  position:absolute;right:-8px;top:-7px;
+  width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#19b866;color:white;font-size:17px;font-weight:900;
+  border:2px solid #075a34;
+}
+.court-player-name{
+  display:block;max-width:112px;margin-top:5px;padding:3px 6px;
+  border-radius:6px;background:rgba(3,45,27,.9);
+  color:#fff;font-size:11px;line-height:1.15;font-weight:700;text-align:center;
+  text-shadow:0 1px 1px rgba(0,0,0,.2);
+}
+.court-lock-message{margin-top:10px}
+@media(max-width:700px){
+  .basket-court{min-width:680px}
+  .court-player{width:100px}
+  .court-photo-wrap{width:62px;height:62px}
+  .court-player-name{font-size:10px;max-width:100px}
+}
+</style>
+
+<style id="fk7-db13-ui">
+.court-selection-layout{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:14px;align-items:stretch}
+.basket-court{background:#b97842!important;border-color:#f4d6a8!important;box-shadow:inset 0 0 0 1px rgba(72,37,16,.25)!important}
+.basket-court:before{border-color:rgba(255,245,224,.84)!important}
+.basket-court:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.20;background:repeating-linear-gradient(0deg,rgba(83,42,18,.28) 0 1px,transparent 1px 24px)}
+.court-half-line{background:rgba(255,245,224,.84)!important}.court-center-circle,.court-key,.court-arc{border-color:rgba(255,245,224,.84)!important}.court-key-left{border-left:0!important}.court-key-right{border-right:0!important}.court-hoop{border-color:#f39a24!important}
+.court-kop-logo{position:absolute;left:50%;top:50%;width:92px;height:92px;object-fit:contain;transform:translate(-50%,-50%);filter:brightness(0) invert(1);opacity:.28;z-index:1}
+.court-player{z-index:4!important}.court-player-name{background:rgba(3,45,27,.92)!important}.court-photo-wrap{border-color:#f8ead8!important}.court-check{border-color:#b97842!important}
+.fantasy-match-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#032d1b;border:1px solid #0a7441}
+.fantasy-team-logos{display:flex;align-items:center;gap:8px;font-weight:900}.fantasy-team-logos img{width:38px;height:38px;object-fit:contain;border-radius:8px;background:white;padding:3px}
+.court-selection-card{background:#032d1b;border:1px solid #0a7441;border-radius:13px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
+.selection-photo-wrap{position:relative;width:92px;height:92px;display:block;border:4px solid #f39a24;border-radius:50%}.selection-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%}.selection-check{position:absolute;right:-7px;top:-7px;width:28px;height:28px;border-radius:50%;background:#19b866;color:white;display:grid;place-items:center;font-weight:900;border:2px solid #032d1b}.selection-empty{color:#cfe9da;font-size:.9rem}
+.admin-team-images{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.admin-team-images label{display:flex;flex-direction:column;gap:6px}.edit-player-preview{display:flex;align-items:center;gap:8px}.edit-player-preview img{width:38px;height:38px;object-fit:cover;border-radius:50%}
+.admin-day-card{border:1px solid #0a7441;border-radius:14px;overflow:hidden;margin:0 0 14px;background:#032d1b}.admin-day-header{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:15px}.admin-day-header h4{margin:3px 0 2px!important}.day-kicker{font-size:.72rem;letter-spacing:.11em;color:#cfe9da;font-weight:800}.admin-day-score{display:grid;grid-template-columns:auto auto auto;align-items:center;gap:8px;font-size:1.6rem;font-weight:900}.admin-day-score small{font-size:.62rem;color:#cfe9da;letter-spacing:.08em}
+.admin-stat-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #0a7441;border-bottom:1px solid #0a7441;background:#054a2c}.admin-stat-strip div{padding:9px;text-align:center;border-right:1px solid #0a7441}.admin-stat-strip div:last-child{border-right:0}.admin-stat-strip strong{display:block;font-size:1.1rem}.admin-stat-strip span{font-size:.72rem;color:#cfe9da}
+.boxscore-row{display:grid;grid-template-columns:28px minmax(120px,1fr) minmax(250px,2fr) 55px;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(10,116,65,.65)}.boxscore-row:last-child{border-bottom:0}.box-rank{font-weight:900;color:#cfe9da}.box-user{display:flex;flex-direction:column}.box-user span{font-size:.74rem;color:#cfe9da}.box-detail{display:flex;gap:8px;flex-wrap:wrap;font-size:.76rem;color:#cfe9da}.box-detail b{color:white}.stat-badge{border:1px solid #0a7441;border-radius:999px;padding:2px 6px;color:white!important}.box-total{font-size:1.15rem;text-align:right}
+@media(max-width:800px){.court-selection-layout{grid-template-columns:1fr}.court-selection-card{flex-direction:row;justify-content:flex-start;text-align:left}.selection-photo-wrap{width:62px;height:62px;flex:0 0 62px}.admin-team-images{grid-template-columns:1fr}.boxscore-row{grid-template-columns:24px 1fr 50px}.box-detail{grid-column:2/-1}}
+</style>
+
+<style id="fk7-db14-fixes">
+/* Le terrain et la sélection latérale tiennent dans la largeur disponible */
+.court-selection-layout{
+  grid-template-columns:minmax(0,1fr) clamp(125px,15vw,165px)!important;
+  gap:12px!important;
+  width:100%;
+  min-width:0;
+}
+.basket-court-wrap{
+  width:100%!important;
+  min-width:0!important;
+  overflow:hidden!important;
+}
+.basket-court{
+  width:100%!important;
+  min-width:0!important;
+  aspect-ratio:1.82/1!important;
+}
+.court-player{width:clamp(70px,7.2vw,104px)!important}
+.court-photo-wrap{width:clamp(46px,4.7vw,68px)!important;height:clamp(46px,4.7vw,68px)!important}
+.court-player-name{font-size:clamp(8px,.72vw,11px)!important;max-width:100%!important}
+.court-selection-card{min-width:0!important;padding:12px!important}
+.selection-photo-wrap{width:clamp(64px,7vw,88px)!important;height:clamp(64px,7vw,88px)!important}
+
+/* Bandeau match proche du concept validé */
+.concept-match-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+  align-items:center!important;
+  padding:12px 16px!important;
+  background:#032d1b!important;
+}
+.concept-team{display:flex;align-items:center;gap:10px;min-width:0}
+.concept-team-right{justify-content:flex-end;text-align:right}
+.concept-team img{width:48px;height:48px;object-fit:contain;background:white;border-radius:10px;padding:4px;flex:0 0 auto}
+.concept-team strong{font-size:clamp(.78rem,1.1vw,1rem);white-space:normal}
+.concept-match-center{text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1.05}
+.concept-match-center b{font-size:1.35rem;margin:3px 0}
+.concept-match-center span{font-size:.72rem;color:#cfe9da;max-width:220px}
+
+/* Profil : historique lisible */
+#userHistory{display:grid;gap:10px}
+.user-history-row{border:1px solid #0a7441;border-radius:10px;padding:11px;background:#032d1b}
+
+@media(max-width:760px){
+  .court-selection-layout{grid-template-columns:minmax(0,1fr) 112px!important;gap:7px!important}
+  .basket-court{aspect-ratio:1.55/1!important}
+  .court-player{width:58px!important}
+  .court-photo-wrap{width:42px!important;height:42px!important}
+  .court-player-name{font-size:7.5px!important;padding:2px 3px!important}
+  .court-selection-card{padding:7px!important}
+  .selection-photo-wrap{width:52px!important;height:52px!important}
+  .court-selection-card strong{font-size:.75rem}
+  .concept-match-head{padding:9px!important}
+  .concept-team{gap:5px}.concept-team img{width:34px;height:34px}
+  .concept-match-center span{display:none}
+}
+</style>
+
+
+<style id="fk7-db15-fixes">
+/* 13 joueurs max : centre du parquet totalement dégagé */
+.basket-court{aspect-ratio:1.9/1!important}
+.court-center-circle{z-index:2!important}
+.court-kop-logo{z-index:2!important;opacity:.38!important}
+.court-player{width:clamp(66px,6.5vw,92px)!important}
+.court-photo-wrap{width:clamp(44px,4.4vw,62px)!important;height:clamp(44px,4.4vw,62px)!important}
+.court-player-name{font-size:clamp(7.5px,.67vw,10px)!important}
+
+/* La carte de sélection reste compacte : priorité visuelle au terrain */
+.court-selection-layout{grid-template-columns:minmax(0,1fr) clamp(112px,13vw,145px)!important}
+.court-selection-card{padding:9px!important}
+.selection-photo-wrap{width:68px!important;height:68px!important}
+.selection-empty{font-size:.78rem!important;line-height:1.25}
+
+/* Historique profil */
+.history-row-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.history-score-chip{background:#075a34;border:1px solid #0a7441;border-radius:999px;padding:5px 9px;font-weight:900;white-space:nowrap}
+.history-facts{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.history-facts>span{background:#054a2c;border:1px solid rgba(10,116,65,.75);border-radius:7px;padding:5px 7px;font-size:.78rem}
+
+@media(max-width:760px){
+  .basket-court{aspect-ratio:1.62/1!important}
+  .court-selection-layout{grid-template-columns:minmax(0,1fr) 96px!important}
+  .court-player{width:50px!important}
+  .court-photo-wrap{width:38px!important;height:38px!important}
+  .court-player-name{font-size:7px!important}
+  .selection-photo-wrap{width:48px!important;height:48px!important}
+  .court-selection-card{padding:5px!important}
+}
+</style>
+
+<style id="fk7-db16-history-fix">
+body.authenticated #userHistory{display:grid!important}
+#userHistory.hidden{display:none}
+body.authenticated #userHistory.hidden{display:grid!important}
+</style>
+
+<style id="fk7-db17-basket-ui">
+/* FANTASY — distribution plus naturelle */
+.basket-court{overflow:hidden}
+.court-player{
+  transform:translate(-50%,-50%)!important;
+  transition:transform .16s ease,border-color .16s ease!important;
+}
+@media (hover:hover) and (pointer:fine){
+  .court-player:not(:disabled):hover{transform:translate(-50%,-50%) scale(1.06)!important;z-index:8}
+}
+.court-player.selected{z-index:9}
+.court-player:nth-of-type(odd) .court-photo-wrap{transform:rotate(-1.5deg)}
+.court-player:nth-of-type(even) .court-photo-wrap{transform:rotate(1.5deg)}
+
+/* PROFIL — Game Log / box score basket */
+#userHistory{
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))!important;
+  gap:12px!important;
+}
+.history-game-card{
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--dark);
+}
+.history-game-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:11px 13px;
+  border-bottom:1px solid var(--border);
+  background:var(--card);
+}
+.history-game-meta{min-width:0;display:flex;flex-direction:column;gap:3px}
+.history-game-meta strong{font-size:.94rem;line-height:1.15}
+.history-game-date{
+  font-size:.65rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+}
+.history-final{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  padding-left:12px;border-left:1px solid var(--border);
+}
+.history-final span{font-size:.58rem;font-weight:900;letter-spacing:.1em;color:var(--muted)}
+.history-final b{font-family:Anton,Inter,sans-serif;font-size:1.25rem;letter-spacing:.04em}
+.history-boxscore{
+  display:grid;
+  grid-template-columns:minmax(125px,1.55fr) repeat(2,minmax(70px,.8fr)) minmax(68px,.72fr);
+  min-width:0;
+}
+.history-player-cell,.history-stat-cell,.history-total-cell{
+  min-width:0;padding:12px 10px;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  border-right:1px solid rgba(10,116,65,.7);
+}
+.history-total-cell{border-right:0;text-align:center;align-items:center;background:rgba(43,212,119,.07)}
+.history-stat-label{
+  font-size:.56rem;font-weight:900;letter-spacing:.11em;
+  color:var(--muted);
+}
+.history-player-cell b,.history-stat-cell b{font-size:.86rem;white-space:normal}
+.history-player-cell small,.history-stat-cell small,.history-total-cell small{
+  color:var(--muted);font-size:.64rem;line-height:1.2;
+}
+.history-fantasy-score{
+  font-family:Anton,Inter,sans-serif;
+  font-size:1.65rem;line-height:1;color:#fff;
+}
+.history-dnp{
+  padding:15px;display:flex;align-items:center;gap:10px;color:var(--muted)
+}
+.history-dnp b{
+  border:1px solid var(--border);border-radius:6px;padding:4px 7px;color:#fff
+}
+.history-game-card.history-empty{opacity:.62}
+
+@media(max-width:600px){
+  #userHistory{grid-template-columns:1fr!important}
+  .history-boxscore{
+    grid-template-columns:minmax(115px,1.4fr) repeat(3,minmax(58px,.72fr));
+  }
+  .history-player-cell,.history-stat-cell,.history-total-cell{padding:9px 6px}
+  .history-game-head{padding:9px 10px}
+  .history-final b{font-size:1.05rem}
+  .history-stat-label{font-size:.5rem}
+  .history-player-cell b,.history-stat-cell b{font-size:.75rem}
+  .history-player-cell small,.history-stat-cell small,.history-total-cell small{font-size:.56rem}
+  .history-fantasy-score{font-size:1.4rem}
+}
+</style>
+
+
+<style id="fk7-db18-ux">
+/* Terrain : photos plus compactes + davantage d'air entre joueurs */
+.court-player{width:clamp(58px,5.8vw,82px)!important}
+.court-photo-wrap{width:clamp(40px,4vw,56px)!important;height:clamp(40px,4vw,56px)!important}
+.court-player-name{
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:clamp(7px,.62vw,9.5px)!important;
+  font-weight:800!important;line-height:1.05!important
+}
+
+/* Historique : priorité à la lisibilité, Anton uniquement sur les gros scores */
+.history-game-card,.history-game-card *{font-family:Inter,Arial,sans-serif}
+.history-game-meta strong{font-size:1rem!important;font-weight:800!important}
+.history-game-date{font-size:.68rem!important;letter-spacing:.055em!important}
+.history-final b,.history-fantasy-score{font-family:Anton,Inter,sans-serif!important}
+.history-stat-label{
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:.62rem!important;letter-spacing:.07em!important;
+  font-weight:800!important
+}
+.history-player-cell b,.history-stat-cell b{
+  font-size:.9rem!important;font-weight:800!important;line-height:1.15!important
+}
+.history-player-cell small,.history-stat-cell small,.history-total-cell small{
+  font-size:.67rem!important;line-height:1.25!important
+}
+.history-boxscore{
+  grid-template-columns:minmax(135px,1.35fr) minmax(78px,.72fr) minmax(110px,1fr) minmax(88px,.8fr)!important
+}
+.history-bonus-cell{background:rgba(255,255,255,.025)}
+.history-score-breakdown{
+  padding:10px 12px 12px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+  border-top:1px solid rgba(10,116,65,.55);
+  background:rgba(0,0,0,.10);
+}
+.history-score-title{
+  grid-column:1/-1;
+  font-size:.64rem;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:2px
+}
+.history-score-breakdown>span{
+  min-width:0;display:flex;justify-content:space-between;align-items:center;gap:6px;
+  padding:7px 8px;border-radius:7px;background:#054a2c
+}
+.history-score-breakdown i{
+  font-style:normal;font-size:.66rem;color:var(--muted);line-height:1.1
+}
+.history-score-breakdown b{font-size:.78rem;white-space:nowrap}
+.history-score-breakdown .history-bonus-line{grid-column:span 2}
+.history-score-breakdown .history-score-total{
+  grid-column:1/-1;
+  background:var(--card);border:1px solid var(--border);padding:9px 10px
+}
+.history-score-total i{font-size:.72rem;color:#fff;font-weight:800}
+.history-score-total b{font-size:.95rem}
+.history-fantasy-score{font-size:1.75rem!important}
+
+@media(max-width:600px){
+  .court-player{width:46px!important}
+  .court-photo-wrap{width:35px!important;height:35px!important}
+  .court-player-name{font-size:6.5px!important}
+  .history-boxscore{
+    grid-template-columns:1.2fr .72fr 1fr .8fr!important
+  }
+  .history-score-breakdown{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .history-score-breakdown .history-bonus-line{grid-column:1/-1}
+}
+</style>
+
+
+<style id="fk7-db19-history-court">
+/* Terrain : tous les noms restent dans le parquet, y compris la rangée basse */
+.basket-court{padding-top:5px!important;padding-bottom:20px!important;box-sizing:border-box!important}
+.court-player{
+  width:clamp(62px,6vw,86px)!important;
+  overflow:visible!important;
+}
+.court-player-name{
+  display:block!important;
+  max-width:86px!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  text-align:center!important;
+  font-size:clamp(7.5px,.65vw,9.5px)!important;
+  line-height:1.05!important;
+  margin-top:2px!important;
+}
+
+/* Historique = vraie ligne de feuille de match */
+#userHistory{display:block!important}
+.history-game-card{margin-bottom:12px!important}
+.history-sheet-wrap{
+  width:100%;
+  overflow-x:auto;
+  scrollbar-width:thin;
+}
+.history-sheet{
+  width:100%;
+  min-width:650px;
+  border-collapse:collapse;
+  table-layout:fixed;
+  font-family:Inter,Arial,sans-serif!important;
+}
+.history-sheet th{
+  padding:7px 8px;
+  border-right:1px solid rgba(10,116,65,.65);
+  border-bottom:1px solid var(--border);
+  color:var(--muted);
+  font-size:.58rem;
+  font-weight:900;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+  text-align:center;
+  background:rgba(0,0,0,.13);
+}
+.history-sheet th:first-child{text-align:left;width:24%}
+.history-sheet th:nth-child(2){width:9%}
+.history-sheet th:nth-child(3){width:12%}
+.history-sheet th:nth-child(4){width:11%}
+.history-sheet th:nth-child(5){width:18%}
+.history-sheet th:nth-child(6){width:10%}
+.history-sheet th:last-child{width:16%;border-right:0}
+.history-sheet td{
+  padding:11px 8px;
+  border-right:1px solid rgba(10,116,65,.55);
+  text-align:center;
+  vertical-align:middle;
+  font-size:.84rem;
+  font-weight:800;
+}
+.history-sheet td:last-child{border-right:0}
+.history-sheet-player{text-align:left!important}
+.history-sheet-player b{display:block;font-size:.9rem}
+.history-sheet-player small,.history-sheet-bonus small{
+  display:block;margin-top:3px;color:var(--muted);
+  font-size:.62rem;font-weight:600;line-height:1.15
+}
+.history-sheet-total{
+  background:rgba(43,212,119,.08)!important;
+}
+.history-sheet-total .history-fantasy-score{
+  display:block;
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:1.35rem!important;
+  font-weight:900!important;
+}
+.history-sheet-total small{
+  display:block;font-size:.54rem!important;letter-spacing:.06em
+}
+.history-score-note{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:7px 10px;
+  border-top:1px solid rgba(10,116,65,.5);
+  color:var(--muted);
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:.66rem;
+}
+.history-score-note strong{color:#fff;white-space:nowrap;font-size:.72rem}
+
+/* ancien bloc de détail non utilisé */
+.history-score-breakdown{display:none!important}
+
+@media(max-width:600px){
+  .basket-court{padding-bottom:18px!important}
+  .court-player{width:48px!important}
+  .court-player-name{max-width:52px!important;font-size:6.7px!important}
+  .history-sheet{min-width:610px}
+  .history-sheet th{font-size:.54rem;padding:6px}
+  .history-sheet td{font-size:.76rem;padding:9px 6px}
+  .history-score-note{font-size:.61rem}
+}
+</style>
+
+
+<style id="fk7-db20-history">
+/* Historique : une seule ligne de stats par match, sans box ni cartes imbriquées */
+#userHistory{display:block!important}
+.history-game-card{
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  border-bottom:1px solid rgba(10,116,65,.7)!important;
+}
+.history-game-head{
+  padding:9px 4px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.history-game-meta strong,
+.history-game-meta span,
+.history-final span,
+.history-final b{
+  font-family:Inter,Arial,sans-serif!important;
+}
+.history-game-meta strong{font-size:.88rem!important}
+.history-final b{font-size:1rem!important;font-weight:800!important}
+.history-stat-line{
+  display:grid;
+  grid-template-columns:
+    minmax(105px,1.25fr)
+    minmax(95px,1.1fr)
+    minmax(82px,.8fr)
+    minmax(90px,.9fr)
+    minmax(78px,.72fr)
+    minmax(78px,.72fr)
+    minmax(68px,.62fr)
+    minmax(68px,.62fr)
+    minmax(78px,.7fr);
+  align-items:stretch;
+  width:100%;
+  min-width:850px;
+  font-family:Inter,Arial,sans-serif!important;
+}
+.history-game-card{overflow-x:auto!important}
+.history-stat-item,.history-stat-total{
+  min-width:0;
+  padding:8px 7px 10px;
+  border-right:1px solid rgba(10,116,65,.42);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+}
+.history-stat-item span,.history-stat-total span{
+  color:var(--muted);
+  font-size:.56rem;
+  font-weight:700;
+  line-height:1.1;
+  text-transform:uppercase;
+  letter-spacing:.045em;
+}
+.history-stat-item b{
+  color:#fff;
+  font-size:.78rem;
+  font-weight:700;
+  line-height:1.15;
+  overflow-wrap:anywhere;
+}
+.history-stat-total{
+  border-right:0;
+  text-align:center;
+  align-items:center;
+}
+.history-stat-total .history-fantasy-score,
+.history-stat-total>b{
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:1.3rem!important;
+  line-height:1!important;
+  font-weight:900!important;
+  color:#ff9f1c!important;
+}
+.history-stat-line-empty{
+  grid-template-columns:1fr 1fr minmax(90px,.6fr);
+  min-width:420px;
+}
+.history-score-data{display:none!important}
+
+/* Neutralise les anciens styles de feuille/boxscore */
+.history-sheet-wrap,.history-sheet,.history-score-note,.history-score-breakdown{display:none!important}
+
+@media(max-width:600px){
+  .history-game-head{padding:8px 2px!important}
+  .history-stat-line{min-width:800px}
+  .history-stat-item,.history-stat-total{padding:7px 6px 9px}
+  .history-stat-item span,.history-stat-total span{font-size:.52rem}
+  .history-stat-item b{font-size:.72rem}
+}
+</style>
+
+
+<style id="fk7-db21-history">
+/* Historique : exactement une ligne visible par match, sans scroll horizontal */
+.history-game-card{
+  overflow:visible!important;
+  display:grid!important;
+  grid-template-columns:minmax(145px,1.15fr) minmax(0,5.85fr)!important;
+  align-items:stretch!important;
+}
+.history-game-head{
+  min-width:0!important;
+  padding:7px 9px!important;
+  border-right:1px solid rgba(10,116,65,.55)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:3px!important;
+}
+.history-game-meta{gap:2px!important}
+.history-game-meta strong{
+  font-size:.76rem!important;
+  line-height:1.12!important;
+}
+.history-game-date{font-size:.52rem!important}
+.history-final{
+  border:0!important;
+  padding:0!important;
+  gap:5px!important;
+}
+.history-final span{font-size:.48rem!important}
+.history-final b{font-size:.78rem!important}
+
+.history-stat-line{
+  min-width:0!important;
+  width:100%!important;
+  grid-template-columns:
+    minmax(80px,1.25fr)
+    minmax(72px,1.05fr)
+    minmax(62px,.78fr)
+    minmax(72px,.9fr)
+    minmax(58px,.68fr)
+    minmax(58px,.68fr)
+    minmax(48px,.56fr)
+    minmax(48px,.56fr)
+    minmax(58px,.64fr)!important;
+}
+.history-stat-item,.history-stat-total{
+  padding:7px 5px!important;
+  gap:3px!important;
+}
+.history-stat-item span,.history-stat-total span{
+  font-size:.46rem!important;
+  letter-spacing:.025em!important;
+  white-space:normal!important;
+}
+.history-stat-item b{
+  font-size:.65rem!important;
+  line-height:1.08!important;
+  overflow-wrap:anywhere!important;
+}
+.history-stat-total .history-fantasy-score,
+.history-stat-total>b{
+  font-size:1.05rem!important;
+}
+.history-stat-line-empty{
+  min-width:0!important;
+  grid-template-columns:1fr 1fr .8fr!important;
+}
+
+/* Mobile : toujours une ligne par match, colonnes compactes, zéro scrollbar */
+@media(max-width:760px){
+  .history-game-card{
+    grid-template-columns:100px minmax(0,1fr)!important;
+  }
+  .history-game-head{padding:5px!important}
+  .history-game-meta strong{font-size:.62rem!important}
+  .history-game-date{font-size:.43rem!important}
+  .history-final b{font-size:.65rem!important}
+  .history-final span{display:none!important}
+  .history-stat-line{
+    grid-template-columns:
+      1.25fr 1fr .72fr .8fr .6fr .6fr .52fr .52fr .62fr!important;
+  }
+  .history-stat-item,.history-stat-total{padding:5px 2px!important}
+  .history-stat-item span,.history-stat-total span{
+    font-size:.36rem!important;
+    line-height:1!important;
+  }
+  .history-stat-item b{
+    font-size:.49rem!important;
+    line-height:1.03!important;
+  }
+  .history-stat-total .history-fantasy-score,
+  .history-stat-total>b{font-size:.82rem!important}
+}
+</style>
+
+
+<style id="fk7-db22-history-root-fix">
+/* Correctif racine : l'historique est une LISTE verticale.
+   Une rencontre occupe toujours 100% de la largeur, jamais une cellule de grille. */
+body.authenticated #userHistory,
+body.authenticated #userHistory.hidden,
+#userHistory,
+#userHistory.hidden{
+  display:block!important;
+  width:100%!important;
+}
+
+#userHistory .history-game-card{
+  display:grid!important;
+  grid-template-columns:170px minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+#userHistory .history-stat-line{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+@media(max-width:760px){
+  #userHistory .history-game-card{
+    grid-template-columns:92px minmax(0,1fr)!important;
+  }
+}
+</style>
+
+
+<style id="fk7-db23-history-table">
+/* HISTORIQUE — vrai tableau de statistiques basket */
+#userHistory,
+body.authenticated #userHistory,
+body.authenticated #userHistory.hidden{
+  display:block!important;
+  width:100%!important;
+  overflow:visible!important;
+  font-family:"Courier New",Courier,monospace!important;
+}
+
+.history-table-header,
+#userHistory .history-table-row{
+  display:grid!important;
+  grid-template-columns:
+    1.45fr 1fr 1fr .82fr .9fr .78fr .78fr .82fr .78fr .72fr!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+.history-table-header{
+  background:#032d1b!important;
+  border:1px solid #0a7441!important;
+  border-bottom:2px solid #2bd477!important;
+}
+.history-table-header>div{
+  padding:10px 7px!important;
+  border-right:1px solid rgba(43,212,119,.25)!important;
+  color:#cfe9da!important;
+  font:700 .61rem/1.12 "Courier New",Courier,monospace!important;
+  text-transform:uppercase!important;
+  letter-spacing:.015em!important;
+  display:flex!important;
+  align-items:flex-end!important;
+}
+.history-table-header>div:last-child{border-right:0!important}
+
+#userHistory .history-game-card{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  overflow:visible!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+
+/* Ancien en-tête du match supprimé : le match est désormais la 1re cellule de la ligne */
+#userHistory .history-game-head{display:none!important}
+
+#userHistory .history-table-row{
+  border-left:1px solid #0a7441!important;
+  border-right:1px solid #0a7441!important;
+  border-bottom:1px solid rgba(43,212,119,.38)!important;
+  background:rgba(0,0,0,.045)!important;
+}
+#userHistory .history-game-card:nth-of-type(even) .history-table-row{
+  background:rgba(255,255,255,.018)!important;
+}
+
+#userHistory .history-cell{
+  min-width:0!important;
+  padding:10px 7px!important;
+  border-right:1px solid rgba(43,212,119,.20)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:3px!important;
+  color:#fff!important;
+  font:400 .72rem/1.14 "Courier New",Courier,monospace!important;
+  overflow-wrap:anywhere!important;
+}
+#userHistory .history-cell:last-child{border-right:0!important}
+#userHistory .history-cell b{
+  font:700 .72rem/1.14 "Courier New",Courier,monospace!important;
+  color:#fff!important;
+}
+#userHistory .history-cell small{
+  color:#cfe9da!important;
+  font:400 .59rem/1.1 "Courier New",Courier,monospace!important;
+}
+#userHistory .history-match-cell b{font-size:.75rem!important}
+#userHistory .history-real-score{font-weight:700!important;color:#fff!important}
+
+#userHistory .history-points{
+  text-align:center!important;
+  align-items:center!important;
+}
+#userHistory .history-bonus-detail small,
+#userHistory .history-malus-detail small{
+  font-weight:700!important;
+  color:#fff!important;
+}
+
+#userHistory .history-total-cell{
+  text-align:center!important;
+  align-items:center!important;
+  background:rgba(255,159,28,.06)!important;
+}
+#userHistory .history-total-cell .history-fantasy-score,
+#userHistory .history-total-cell>b{
+  color:#ff9f1c!important;
+  font:700 1.08rem/1 "Courier New",Courier,monospace!important;
+}
+
+/* Plus aucun ancien bloc visuel */
+.history-stat-line,.history-sheet-wrap,.history-score-note,
+.history-score-breakdown,.history-score-data{display:none!important}
+
+/* On conserve le tableau complet, mais il se resserre sans générer de scrollbar. */
+@media(max-width:900px){
+  .history-table-header>div{
+    padding:7px 3px!important;
+    font-size:.48rem!important;
+  }
+  #userHistory .history-cell{
+    padding:8px 3px!important;
+    font-size:.57rem!important;
+  }
+  #userHistory .history-cell b{font-size:.57rem!important}
+  #userHistory .history-cell small{font-size:.47rem!important}
+  #userHistory .history-total-cell .history-fantasy-score,
+  #userHistory .history-total-cell>b{font-size:.88rem!important}
+}
+</style>
+
+<style id="fk7-db24-bonus">
+.admin-bonus-manager select,.admin-bonus-manager input,.admin-bonus-manager textarea{min-width:0}
+.dynamic-bonus.active{outline:2px solid #2bd477}
+.dynamic-bonus.locked{opacity:.62}
+</style>
+<style id="fk7-db26-bonus-admin">
+.bonus-admin-list{display:grid;gap:10px;margin-top:14px}
+.bonus-admin-row{display:grid;grid-template-columns:minmax(190px,1.4fr) minmax(150px,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.08)}
+.bonus-admin-row.is-paused{opacity:.7}
+.bonus-admin-main{display:flex;gap:10px;align-items:center;min-width:0}
+.bonus-admin-main img,.bonus-admin-placeholder{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:0 0 44px}
+.bonus-admin-placeholder{background:rgba(255,255,255,.06)}
+.bonus-admin-status{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.bonus-admin-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.bonus-admin-actions button{width:auto;margin:0;padding:8px 10px}
+.bonus-delete-btn{border-color:#c94a4a!important}
+@media(max-width:760px){.bonus-admin-row{grid-template-columns:1fr}.bonus-admin-actions{justify-content:flex-start}}
+</style>
+
+
+<style id="fk7-db33-mobile-corrections">
+/* DB TEST 33 — correctifs responsive mobile */
+
+/* Authentification : actions secondaires clairement visibles en orange basket. */
+#loginPanel #loginMode button.auth-link,
+#loginPanel #signupMode button.auth-link,
+#loginPanel button.auth-link,
+#loginPanel .auth-link,
+#loginPanel .auth-link:visited,
+#loginPanel .auth-link:active{
+  color:#ff9f1c!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  font-weight:800!important;
+  text-decoration:none!important;
+  -webkit-text-fill-color:#ff9f1c!important;
+}
+#loginPanel button.auth-link:hover,
+#loginPanel button.auth-link:focus-visible{
+  color:#ffb347!important;
+  -webkit-text-fill-color:#ffb347!important;
+}
+
+@media(max-width:760px){
+  /* FANTASY : le terrain récupère toute la largeur ; la sélection passe dessous. */
+  .court-selection-layout{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+    width:100%!important;
+  }
+  .basket-court-wrap{
+    width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .basket-court{
+    width:100%!important;
+    min-width:0!important;
+    aspect-ratio:1.30/1!important;
+  }
+  .court-player{width:58px!important}
+  .court-photo-wrap{width:42px!important;height:42px!important}
+  .court-player-name{
+    max-width:58px!important;
+    font-size:7.5px!important;
+    line-height:1.05!important;
+    padding:2px 3px!important;
+  }
+  .court-selection-card{
+    width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    padding:9px 11px!important;
+    flex-direction:row!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+    gap:10px!important;
+  }
+  .selection-photo-wrap{width:52px!important;height:52px!important;flex:0 0 52px!important}
+  .court-selection-card strong{font-size:.86rem!important}
+  .selection-empty{font-size:.82rem!important}
+
+  /* HISTORIQUE : sur téléphone, une ligne devient une fiche lisible sans scroll horizontal. */
+  .history-table-header{display:none!important}
+  #userHistory{display:block!important;width:100%!important;overflow:visible!important}
+  #userHistory .history-game-card{
+    display:block!important;
+    margin:0 0 12px!important;
+    border:1px solid #0a7441!important;
+    border-radius:11px!important;
+    overflow:hidden!important;
+    background:#032d1b!important;
+  }
+  #userHistory .history-table-row{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    width:100%!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  #userHistory .history-cell{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    align-content:start!important;
+    gap:3px!important;
+    min-width:0!important;
+    padding:9px 10px!important;
+    border-right:1px solid rgba(43,212,119,.20)!important;
+    border-bottom:1px solid rgba(43,212,119,.20)!important;
+    text-align:left!important;
+    align-items:start!important;
+    font-size:.72rem!important;
+  }
+  #userHistory .history-cell:nth-child(even){border-right:0!important}
+  #userHistory .history-cell::before{
+    display:block!important;
+    margin-bottom:2px!important;
+    color:#cfe9da!important;
+    font:700 .56rem/1.1 "Courier New",Courier,monospace!important;
+    text-transform:uppercase!important;
+    letter-spacing:.035em!important;
+  }
+  #userHistory .history-cell:nth-child(1)::before{content:"Match"}
+  #userHistory .history-cell:nth-child(2)::before{content:"Joueur terrain"}
+  #userHistory .history-cell:nth-child(3)::before{content:"Joueur banc"}
+  #userHistory .history-cell:nth-child(4)::before{content:"Prono réalisé"}
+  #userHistory .history-cell:nth-child(5)::before{content:"Bonus utilisé"}
+  #userHistory .history-cell:nth-child(6)::before{content:"Résultat joueur"}
+  #userHistory .history-cell:nth-child(7)::before{content:"Résultat match"}
+  #userHistory .history-cell:nth-child(8)::before{content:"Bonus"}
+  #userHistory .history-cell:nth-child(9)::before{content:"Malus"}
+  #userHistory .history-cell:nth-child(10)::before{content:"Total points"}
+  #userHistory .history-match-cell{
+    grid-column:1/-1!important;
+    border-right:0!important;
+    background:#075a34!important;
+  }
+  #userHistory .history-match-cell b{font-size:.82rem!important}
+  #userHistory .history-cell b{font-size:.72rem!important}
+  #userHistory .history-cell small{font-size:.62rem!important}
+  #userHistory .history-total-cell{
+    align-items:start!important;
+    text-align:left!important;
+    background:rgba(255,159,28,.09)!important;
+  }
+  #userHistory .history-total-cell .history-fantasy-score,
+  #userHistory .history-total-cell>b{font-size:1.05rem!important}
+}
+
+@media(max-width:420px){
+  .basket-court{aspect-ratio:1.20/1!important}
+  .court-player{width:54px!important}
+  .court-photo-wrap{width:40px!important;height:40px!important}
+  .court-player-name{max-width:54px!important;font-size:7px!important}
+}
+</style>
+
 </head>
 
 <body>
@@ -1119,10 +2374,15 @@ button{
     📊 Résultats
   </button>
 
-  <button class="tab" onclick="showTab('admin',this)">
+  <button class="tab hidden" id="adminTabButton" onclick="showTab('admin',this)">
     🔐 Admin
   </button>
 
+
+
+  <button class="tab" id="connectionTabButton" onclick="showTab('connexion',this)">
+    👤 Connexion
+  </button>
 </div>
 
 
@@ -1130,62 +2390,40 @@ button{
      CONNEXION
 ================================================== -->
 
-<div class="card">
+<section id="tab-connexion" class="hidden">
+<div class="card auth-card" id="authCard">
 
-  <h3>👤 Participant</h3>
-
-  <div class="row">
-
-    <input
-      id="pseudo"
-      maxlength="30"
-      placeholder="Ton pseudo"
-      autocomplete="off"
-    >
-
-    <input
-      id="code"
-      maxlength="30"
-      placeholder="Ton code personnel"
-      type="password"
-    >
-
-    <button class="btn" onclick="login()">
-      Se connecter
-    </button>
-
+  <div id="loginMode">
+    <h3>👤 Connexion</h3>
+    <input id="authEmail" type="email" placeholder="Adresse e-mail" autocomplete="email">
+    <input id="authPassword" type="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="btn auth-main-btn" onclick="login()">Se connecter</button>
+    <button class="auth-link" type="button" onclick="requestPasswordReset()">Mot de passe oublié ?</button>
+    <button class="auth-link" type="button" onclick="showSignupMode()">Première visite ? Créer un compte</button>
   </div>
 
-  <div
-    style="
-      margin-top:10px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    "
-  >
-    <div
-      id="user"
-      class="small"
-    ></div>
+  <div id="signupMode" class="hidden">
+    <h3>Créer votre compte</h3>
+    <input id="authPseudo" maxlength="30" placeholder="Pseudo" autocomplete="nickname">
+    <input id="signupEmail" type="email" placeholder="Adresse e-mail" autocomplete="email">
+    <input id="signupPassword" type="password" placeholder="Mot de passe (8 caractères minimum)" autocomplete="new-password">
+    <button class="btn auth-main-btn" onclick="signup()">Créer mon compte</button>
+    <button class="auth-link" type="button" onclick="showLoginMode()">← J'ai déjà un compte</button>
+  </div>
 
-    <button
-      id="logoutUserButton"
-      class="btn-secondary hidden"
-      onclick="logoutUser()"
-      style="padding:6px 10px"
-    >
-      Se déconnecter
+  <div class="auth-session">
+    <div id="user" class="small"></div>
+    <button id="logoutUserButton" class="btn-secondary hidden" onclick="logoutUser()" style="padding:6px 10px">
+      Déconnexion
     </button>
   </div>
 
-  <div class="small" style="margin-top:7px">
-    🔐 Utilise un code propre à Fantasy Kop 7 et non un mot de passe utilisé ailleurs.
-  </div>
+  <div id="userHistory" class="hidden" style="margin-top:16px"></div>
 
 </div>
 
+
+</section>
 
 <!-- ==================================================
      FANTASY
@@ -1193,7 +2431,13 @@ button{
 
 <section id="tab-fantasy">
 
-<div class="card">
+<div class="fantasy-subtabs">
+  <button class="fantasy-subtab active" onclick="showFantasySection('starter',this)">🏀 Joueur titulaire</button>
+  <button class="fantasy-subtab" onclick="showFantasySection('bench',this)">🪑 Joueur banc</button>
+  <button class="fantasy-subtab" onclick="showFantasySection('bonuses',this)">✨ Bonus</button>
+</div>
+
+<div class="card fantasy-section" data-fantasy-section="starter">
 
   <h3>🏀 Choisis ton joueur titulaire</h3>
 
@@ -1210,26 +2454,17 @@ button{
   </div>
 
   <br>
-
-  <input
-    id="playerSearch"
-    placeholder="🔎 Rechercher un joueur..."
-    oninput="renderPlayers()"
-  >
-
-  <br><br>
-
-  <div id="players"></div>
+<div id="players"></div>
 
 </div>
 
 
-<div class="card">
+<div class="card fantasy-section hidden" data-fantasy-section="bench">
 
-  <h3>🪑 Ton Joker banc</h3>
+  <h3>🪑 Choix du joueur banc</h3>
 
   <div class="small">
-    Le Joker est activé automatiquement si ton titulaire ne joue pas.
+    Le joueur banc remplace automatiquement ton titulaire si celui-ci ne joue pas.
     Il est modifiable jusqu'à 5 minutes après le début du match.
   </div>
 
@@ -1240,7 +2475,7 @@ button{
 </div>
 
 
-<div class="card">
+<div class="card fantasy-section hidden" data-fantasy-section="bonuses">
 
   <h3>✨ Tes bonus</h3>
 
@@ -1360,22 +2595,17 @@ button{
 
   <div id="adminLogin">
 
-    <div class="row">
-
-      <input
-        type="password"
-        id="adminPassword"
-        placeholder="Mot de passe admin"
-      >
-
-      <button
-        class="btn"
-        onclick="adminLogin()"
-      >
-        Accéder
-      </button>
-
+    <div class="info small" id="adminAccessInfo">
+      Connectez-vous avec votre compte administrateur pour accéder à cette rubrique.
     </div>
+
+    <button
+      class="btn"
+      onclick="adminLogin()"
+      style="margin-top:10px"
+    >
+      Accéder à l'administration
+    </button>
 
   </div>
 
@@ -1384,6 +2614,13 @@ button{
     id="adminPanel"
     class="hidden"
   >
+    <div class="admin-subtabs">
+      <button class="admin-subtab active" data-section="matches" onclick="showAdminSection('matches',this)">🏀 Matchs</button>
+      <button class="admin-subtab" data-section="players" onclick="showAdminSection('players',this)">👥 Joueurs</button>
+      <button class="admin-subtab" data-section="bonuses" onclick="showAdminSection('bonuses',this)">🃏 Bonus</button>
+      <button class="admin-subtab" data-section="users" onclick="showAdminSection('users',this)">👤 Utilisateurs</button>
+      <button class="admin-subtab" data-section="feedback" onclick="showAdminSection('feedback',this)">💬 Retours</button>
+    </div>
 
     <div class="card admin">
 
@@ -1404,6 +2641,16 @@ button{
 
       <div class="info small" style="margin-top:8px">
         L'ordre des équipes dans les pronostics s'adaptera automatiquement.
+      </div>
+      <div class="admin-team-images">
+        <label><span class="small">Logo / image Limoges CSP</span>
+          <input id="matchCspImage" type="file" accept="image/png,image/jpeg,image/webp">
+          <span id="matchCspImageInfo" class="small">JPG, PNG ou WebP · 3 Mo maximum</span>
+        </label>
+        <label><span class="small">Logo / image adversaire</span>
+          <input id="matchOpponentImage" type="file" accept="image/png,image/jpeg,image/webp">
+          <span id="matchOpponentImageInfo" class="small">JPG, PNG ou WebP · 3 Mo maximum</span>
+        </label>
       </div>
 
       <br><br>
@@ -1451,7 +2698,26 @@ button{
 
       <br>
 
-      <h3>📊 +/- des joueurs</h3>
+      <h3>👥 Effectif CSP</h3>
+
+      <div class="info small">
+        Ajoutez ou désactivez les joueurs depuis l'Admin. Désactiver un joueur conserve son historique.
+      </div>
+
+      <div class="admin-player-manager">
+        <input id="newPlayerName" placeholder="Nom du joueur">
+        <input id="newPlayerPhoto" type="file" accept="image/png,image/jpeg,image/webp">
+        <div id="newPlayerPhotoPreview" class="small">JPG, PNG ou WebP · 3 Mo maximum</div>
+        <input id="newPlayerOrder" type="number" min="0" placeholder="Ordre" value="0">
+        <button class="btn" id="savePlayerButton" onclick="adminSavePlayer()">Ajouter le joueur</button>
+        <button class="btn-secondary hidden" id="cancelPlayerEditButton" onclick="cancelPlayerEdit()">Annuler</button>
+      </div>
+
+      <div id="adminRoster" style="margin-top:12px"></div>
+
+      <br>
+
+      <h3>📊 +/- des joueurs pour ce match</h3>
 
       <div id="adminPlayers"></div>
 
@@ -1518,6 +2784,46 @@ button{
 
     </div>
 
+
+    <div class="card" id="adminStatsCard">
+      <h3>📈 Statistiques des journées</h3>
+      <div class="small">Scores Fantasy obtenus par journée et détail du calcul pour chaque participant.</div>
+      <div id="adminGameStats" style="margin-top:14px"></div>
+    </div>
+
+    <div class="card">
+      <h3>🃏 Gestion des bonus</h3>
+      <div class="info small">
+        Créez, modifiez ou désactivez les bonus. Les règles spéciales Cocu et Vidéo Jean-Marc restent protégées côté Supabase.
+      </div>
+      <div class="admin-bonus-manager" style="margin-top:10px">
+        <input id="bonusDefName" placeholder="Nom du bonus">
+        <input id="bonusDefCode" placeholder="Code (ex. mon_bonus)">
+        <input id="bonusDefPhoto" type="file" accept="image/png,image/jpeg,image/webp">
+        <div id="bonusDefPhotoInfo" class="small">JPG, PNG ou WebP · 3 Mo maximum</div>
+        <input id="bonusDefMaxUses" type="number" min="1" value="1" placeholder="Utilisations / saison">
+        <select id="bonusDefRule" onchange="syncBonusEffectFields()">
+          <option value="generic">Bonus configurable</option>
+          <option value="cocu">Cocu</option>
+          <option value="video_jean_marc">Vidéo Jean-Marc</option>
+        </select>
+        <select id="bonusDefEffect" onchange="syncBonusEffectFields()">
+          <option value="add_points">Ajouter des points (+X)</option>
+          <option value="subtract_points">Retirer des points (-X)</option>
+          <option value="multiply_player">Multiplier le +/- joueur (×X)</option>
+          <option value="cancel_player">Annuler le +/- joueur</option>
+          <option value="none">Aucun effet</option>
+        </select>
+        <input id="bonusDefEffectValue" type="number" step="1" value="5" placeholder="Valeur (ex. 10)">
+        <textarea id="bonusDefDescription" placeholder="Description"></textarea>
+        <div class="info small" id="bonusEffectPreview" style="grid-column:1/-1">
+          Effet : +5 points au score du match.
+        </div>
+        <button class="btn" id="saveBonusDefButton" onclick="adminSaveBonusDefinition()">Ajouter le bonus</button>
+        <button class="btn-secondary hidden" id="cancelBonusDefEditButton" onclick="cancelBonusDefinitionEdit()">Annuler</button>
+      </div>
+      <div id="adminBonusDefinitions" style="margin-top:12px"></div>
+    </div>
 
     <div class="card">
 
@@ -1630,6 +2936,17 @@ button{
   </button>
 </div>
 
+
+<div id="passwordResetModal" class="modal-overlay hidden" onclick="closePasswordResetModal(event)">
+  <div class="modal-panel" onclick="event.stopPropagation()">
+    <button class="btn-secondary modal-close" onclick="closePasswordResetModal()">✕ Fermer</button>
+    <h3>Définir un nouveau mot de passe</h3>
+    <p class="small">Choisissez un nouveau mot de passe d'au moins 8 caractères.</p>
+    <input id="newPassword" type="password" placeholder="Nouveau mot de passe" autocomplete="new-password">
+    <button class="btn" style="margin-top:10px" onclick="updatePassword()">Enregistrer le nouveau mot de passe</button>
+  </div>
+</div>
+
 <div
   id="infoModal"
   class="modal-overlay hidden"
@@ -1656,7 +2973,6 @@ button{
    CONFIGURATION
 ================================================== */
 
-const ADMIN_PASSWORD = "KOP7";
 let editingMatchId = null;
 
 
@@ -1679,7 +2995,7 @@ const SHARED_KEYS = new Set([
 
 
 
-const PLAYERS = [
+let PLAYERS = [
 
   {
     name:"Andrew Albicy",
@@ -1792,6 +3108,12 @@ let state = {
 
 let remoteDataReady = false;
 let remoteDataLoading = null;
+let authUser = null;
+let authProfile = null;
+let editingPlayerId = null;
+let editingBonusDefinitionId = null;
+
+
 let rankingMode = "general";
 let rankingHistoryMatchId = null;
 
@@ -1802,7 +3124,6 @@ let rankingHistoryMatchId = null;
 
 async function loadData(){
 
-  state.user = read(KEYS.currentUser,"");
   state.users = read(KEYS.users,{});
   state.picks = read(KEYS.picks,{});
   state.pronos = read(KEYS.pronos,{});
@@ -1847,6 +3168,11 @@ async function loadData(){
       localStorage.setItem(KEYS.winnerMessages, JSON.stringify(state.winnerMessages));
 
       remoteDataReady = true;
+
+      if(authUser){
+        await loadSecureGameData();
+        await loadSecureExtras();
+      }
 
       render();
 
@@ -2447,86 +3773,283 @@ function closeInfoModal(event){
    LOGIN
 ================================================== */
 
-async function login(){
 
-  const pseudoInput =
-    document
-      .getElementById("pseudo")
-      .value
-      .trim();
+async function loadAuthProfile(user){
 
-  const code =
-    document
-      .getElementById("code")
-      .value
-      .trim();
+  if(!user){
+    authUser = null;
+    authProfile = null;
+    state.user = "";
+    state.admin = false;
+    return null;
+  }
 
-  if(!pseudoInput || !code){
+  const { data, error } = await db
+    .from("profiles")
+    .select("id,pseudo,is_admin,created_at")
+    .eq("id", user.id)
+    .single();
 
-    alert(
-      "Entre un pseudo et un code personnel."
+  if(error){
+    console.error("Profile load error:", error);
+    throw error;
+  }
+
+  authUser = user;
+  authProfile = data;
+  state.user = data.pseudo;
+  state.admin = !!data.is_admin;
+
+  return data;
+}
+
+
+async function ensureLegacyUserReference(){
+
+  if(!state.user){
+    return;
+  }
+
+  state.users[state.user] =
+    state.users[state.user] || "AUTH";
+
+  const result =
+    await writeUserBranch(
+      KEYS.users,
+      state.user,
+      "AUTH"
     );
 
-    return;
-
+  if(!result.ok){
+    console.warn(
+      "Impossible d'ajouter le pseudo Auth au stockage historique."
+    );
   }
+}
 
-  if(remoteDataLoading){
-    await remoteDataLoading;
-  }
+
+async function bootstrapAuth(){
 
   try{
 
-    const { data, error } = await db
-      .from("fk7_store")
-      .select("key,value")
-      .in("key", [KEYS.users,KEYS.picks]);
+    const { data, error } =
+      await db.auth.getSession();
 
     if(error) throw error;
 
-    if(data && data.value){
+    const user =
+      data.session?.user || null;
 
-      state.users =
-        data.value;
-
-      localStorage.setItem(
-        KEYS.users,
-        JSON.stringify(state.users)
-      );
-
-      remoteDataReady = true;
-
+    if(user){
+      await loadAuthProfile(user);
     }
 
   }catch(error){
 
     console.error(
-      "User refresh error:",
+      "Auth bootstrap error:",
       error
     );
+
+    authUser = null;
+    authProfile = null;
+    state.user = "";
+    state.admin = false;
+
+  }
+
+  await loadData();
+
+  if(state.user){
+    await ensureLegacyUserReference();
+    await loadSecureGameData();
+    await loadSecureExtras();
+    render();
+  }
+
+  db.auth.onAuthStateChange(
+    async (event, session) => {
+
+      if(event === "PASSWORD_RECOVERY"){
+        document.getElementById("passwordResetModal")?.classList.remove("hidden");
+      }
+
+      if(event === "SIGNED_OUT"){
+
+        authUser = null;
+        authProfile = null;
+        state.user = "";
+        state.admin = false;
+
+        document
+          .getElementById("adminPanel")
+          ?.classList.add("hidden");
+
+        document
+          .getElementById("adminLogin")
+          ?.classList.remove("hidden");
+
+        render();
+        return;
+      }
+
+      if(
+        session?.user &&
+        (
+          event === "SIGNED_IN" ||
+          event === "USER_UPDATED"
+        )
+      ){
+
+        try{
+
+          await loadAuthProfile(
+            session.user
+          );
+
+          await ensureLegacyUserReference();
+          await loadSecureGameData();
+          await loadSecureExtras();
+
+          render();
+
+        }catch(error){
+
+          showToast(
+            "Connexion incomplète",
+            "Impossible de charger votre profil.",
+            "error"
+          );
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+
+
+async function requestPasswordReset(){
+  const email=(document.getElementById("authEmail")?.value||"").trim();
+  if(!email){
+    alert("Renseignez votre adresse e-mail dans le champ de connexion.");
+    return;
+  }
+  const redirectTo="https://morgan-kop7.github.io/Fantasy-Kop7/db-test.html";
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error){
+    showToast("Envoi impossible",error.message,"error");
+    return;
+  }
+  showToast("E-mail envoyé","Consultez votre messagerie pour définir un nouveau mot de passe.");
+}
+
+function closePasswordResetModal(event){
+  if(event && event.target!==event.currentTarget) return;
+  document.getElementById("passwordResetModal")?.classList.add("hidden");
+}
+
+async function updatePassword(){
+  const password=document.getElementById("newPassword")?.value||"";
+  if(password.length<8){
+    alert("Le mot de passe doit contenir au moins 8 caractères.");
+    return;
+  }
+  const {error}=await db.auth.updateUser({password});
+  if(error){
+    showToast("Modification impossible",error.message,"error");
+    return;
+  }
+  document.getElementById("passwordResetModal")?.classList.add("hidden");
+  document.getElementById("newPassword").value="";
+  showToast("Mot de passe modifié","Vous pouvez continuer à utiliser KOP 7.");
+}
+
+function showSignupMode(){
+  document.getElementById("loginMode")?.classList.add("hidden");
+  document.getElementById("signupMode")?.classList.remove("hidden");
+}
+function showLoginMode(){
+  document.getElementById("signupMode")?.classList.add("hidden");
+  document.getElementById("loginMode")?.classList.remove("hidden");
+}
+async function signup(){
+
+  const email =
+    document
+      .getElementById("signupEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("signupPassword")
+      .value;
+
+  const pseudo =
+    document
+      .getElementById("authPseudo")
+      .value
+      .trim();
+
+  if(!email || !password || !pseudo){
+
+    alert(
+      "Pour créer un compte, renseignez e-mail, mot de passe et pseudo."
+    );
+
+    return;
+
+  }
+
+  if(password.length < 8){
+
+    alert(
+      "Choisissez un mot de passe d'au moins 8 caractères."
+    );
+
+    return;
 
   }
 
   const existingPseudo =
-    Object.keys(state.users)
+    Object.keys(state.users || {})
       .find(
-        storedPseudo =>
-          storedPseudo.toLowerCase() ===
-          pseudoInput.toLowerCase()
+        value =>
+          value.toLowerCase() ===
+          pseudo.toLowerCase()
       );
 
-  const pseudo =
-    existingPseudo || pseudoInput;
+  if(existingPseudo){
 
-  if(
-    existingPseudo &&
-    String(state.users[existingPseudo]) !==
-      String(code)
-  ){
+    alert(
+      "Ce pseudo existe déjà. Choisissez-en un autre ou connectez-vous avec le compte associé."
+    );
+
+    return;
+
+  }
+
+  const { data, error } =
+    await db.auth.signUp({
+      email,
+      password,
+      options:{
+        data:{
+          pseudo
+        }
+      }
+    });
+
+  if(error){
 
     showToast(
-      "❌ Connexion impossible",
-      "Le code ne correspond pas à ce pseudo.",
+      "Création impossible",
+      error.message,
       "error"
     );
 
@@ -2534,43 +4057,100 @@ async function login(){
 
   }
 
-  const newAccount =
-    !existingPseudo;
+  if(!data.session){
 
-  state.users[pseudo] =
-    code;
-
-  state.user =
-    pseudo;
-
-  const userWriteResult =
-    await writeUserBranch(
-      KEYS.users,
-      pseudo,
-      state.users[pseudo]
+    showToast(
+      "Compte créé",
+      "Vérifiez votre e-mail pour confirmer le compte avant de vous connecter."
     );
 
-  await write(
-    KEYS.currentUser,
-    state.user
+    return;
+
+  }
+
+  await loadAuthProfile(
+    data.user
   );
+
+  await ensureLegacyUserReference();
+  await loadSecureGameData();
+  await loadSecureExtras();
 
   render();
 
-  if(userWriteResult.ok){
+  showToast(
+    "Compte créé",
+    state.user
+  );
 
-    showToast(
-      newAccount
-        ? "✅ Compte créé"
-        : "✅ Connexion réussie",
-      pseudo
+}
+
+
+async function login(){
+
+  const email =
+    document
+      .getElementById("authEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("authPassword")
+      .value;
+
+  if(!email || !password){
+
+    alert(
+      "Renseignez votre e-mail et votre mot de passe."
     );
 
-  }else{
+    return;
+
+  }
+
+  const { data, error } =
+    await db.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if(error){
 
     showToast(
-      "⚠️ Connexion locale",
-      "Le serveur n'a pas confirmé la synchronisation.",
+      "Connexion impossible",
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await loadAuthProfile(
+      data.user
+    );
+
+    await ensureLegacyUserReference();
+
+    render();
+    const fantasyButton=document.querySelector(".tabs .tab");
+    showTab("fantasy",fantasyButton);
+
+    showToast(
+      "Connexion réussie",
+      state.user
+    );
+
+  }catch(error){
+
+    await db.auth.signOut();
+
+    showToast(
+      "Connexion incomplète",
+      "Le compte existe mais son profil Fantasy KOP 7 est introuvable.",
       "error"
     );
 
@@ -2579,29 +4159,60 @@ async function login(){
 }
 
 
-function logoutUser(){
 
+
+async function logoutUser(){
+
+  const { error } =
+    await db.auth.signOut();
+
+  if(error){
+
+    showToast(
+      "Déconnexion impossible",
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+  authUser = null;
+  authProfile = null;
   state.user = "";
+  state.admin = false;
 
-  localStorage.removeItem(
-    KEYS.currentUser
-  );
+  const email =
+    document.getElementById("authEmail");
+
+  const password =
+    document.getElementById("authPassword");
+
+  const pseudo =
+    document.getElementById("authPseudo");
+
+  if(email) email.value = "";
+  if(password) password.value = "";
+  if(pseudo) pseudo.value = "";
 
   document
-    .getElementById("pseudo")
-    .value = "";
+    .getElementById("adminPanel")
+    ?.classList.add("hidden");
 
   document
-    .getElementById("code")
-    .value = "";
+    .getElementById("adminLogin")
+    ?.classList.remove("hidden");
 
   render();
 
   showToast(
-    "👋 Déconnexion OK"
+    "Déconnexion OK"
   );
 
 }
+
+
 
 
 /* ==================================================
@@ -2662,10 +4273,9 @@ function selectPlayer(player){
   matchPick.starter =
     player;
 
-  writeUserBranch(
-    KEYS.picks,
-    state.user,
-    state.picks[state.user]
+  saveSecurePick(
+    match.id,
+    state.picks[state.user][match.id]
   )
   .then(result => {
 
@@ -2766,11 +4376,7 @@ function selectJoker(player){
     player;
 
 
-  writeUserBranch(
-    KEYS.picks,
-    state.user,
-    state.picks[state.user]
-  )
+  saveSecurePick(match.id,state.picks[state.user][match.id])
   .then(result => {
 
     if(result.ok){
@@ -2802,88 +4408,80 @@ function selectJoker(player){
    BONUS
 ================================================== */
 
-function toggleBonus(type){
 
-  if(!state.user){
-    alert("Connecte-toi d'abord.");
-    return;
+async function toggleDynamicBonus(code){
+  if(!state.user||!authUser)return;
+  const def=getBonusDefinition(code);
+  const match=getCurrentMatch();
+  if(!def||!def.active||def.special_rule!=="generic"||!match)return;
+  if(new Date()>=new Date(match.start)){showToast("Bonus verrouillé","Le match a commencé.");return;}
+  const pick=getPickForMatch(state.user,match);
+  if(!pick?.starter){showToast("Choisissez votre joueur","Sélectionnez d'abord votre joueur terrain.");return;}
+
+  const current=(state.secureBonuses||[]).find(r=>r.bonus_type===code&&String(r.match_id)===String(match.secureId));
+  if(current){
+    const {error}=await db.from("bonuses").delete()
+      .eq("user_id",authUser.id).eq("match_id",match.secureId).eq("bonus_type",code);
+    if(error){showToast("Modification impossible",error.message,"error");return;}
+    await loadSecureExtras();render();showToast("Bonus retiré",def.name);return;
   }
 
-  state.bonuses[state.user] =
-    state.bonuses[state.user] || {};
+  const used=(state.secureBonuses||[]).filter(r=>r.bonus_type===code).length;
+  const max=Math.max(1,Number(def.max_uses_per_season||1));
+  if(used>=max){showToast("Bonus déjà utilisé",`${def.name} : limite de ${max} utilisation(s) atteinte.`);return;}
+  const result=await saveSecureBonus(match.id,code);
+  if(!result.ok){showToast("Activation impossible",result.error?.message||"Erreur Supabase","error");return;}
+  await loadSecureExtras();render();showToast("Bonus activé",`${def.name} · ${formatBonusEffect(def)}`);
+}
 
-  const bonus = state.bonuses[state.user];
+async function toggleBonus(type){
+  if(!state.user || !authUser){ alert("Connectez-vous d'abord."); return; }
+  state.bonuses[state.user]=state.bonuses[state.user]||{};
+  const bonus=state.bonuses[state.user];
 
-  if(type === "cocu"){
+  if(type==="cocu"){
+    const match=getCurrentMatch();
+    if(!match){alert("Aucun match disponible.");return;}
+    const pick=getPickForMatch(state.user,match);
+    if(!pick?.starter){alert("Choisissez d'abord votre joueur titulaire.");return;}
+    if(new Date()>=new Date(match.start)){alert("Le bonus Cocu doit être activé avant le début du match.");return;}
+    if(bonus.cocu){showToast("🔒 Bonus déjà utilisé","Le bonus Cocu n'est utilisable qu'une seule fois sur toute la saison.");return;}
+    const result=await saveSecureBonus(match.id,"cocu");
+    if(!result.ok){showToast("Activation impossible",result.error?.message||"Erreur Supabase","error");return;}
+    bonus.cocu=true; bonus.cocuMatchId=match.id;
+    showToast("Bonus Cocu activé",match.name);
+  }
 
-    const match = getCurrentMatch();
+  if(type==="videoJeanMarc"){
+    const latestStarted=getLatestStartedMatch();
+    const latestOpenAt=latestStarted ? getJeanMarcOpenDate(latestStarted) : null;
 
-    if(!match){
-      alert("Aucun match disponible.");
-      return;
-    }
-
-    const pick = getPickForMatch(state.user, match);
-    if(!pick || !pick.starter){
-      alert("Choisis d'abord ton joueur titulaire.");
-      return;
-    }
-
-    if(new Date() >= new Date(match.start)){
-      alert("Le bonus Cocu doit être activé avant le début du match.");
-      return;
-    }
-
-    if(bonus.cocu){
+    if(!latestStarted || !latestOpenAt || new Date()<latestOpenAt){
       showToast(
-        "🔒 Bonus déjà utilisé",
-        "Le bonus Cocu n'est utilisable qu'une seule fois sur toute la saison."
+        "🔒 Vidéo Jean-Marc verrouillée",
+        latestOpenAt
+          ? `Disponible à partir du ${formatDateTimeShort(latestOpenAt)}.`
+          : "Disponible uniquement après la fin du match."
       );
+      render();
       return;
     }
 
-    bonus.cocu = true;
-    bonus.cocuMatchId = match.id;
+    const match=getLatestJeanMarcEligibleMatch();
+    if(!match){alert("Vidéo Jean-Marc n'est disponible qu'après la fin du match.");return;}
+    const pick=getPickForMatch(state.user,match);
+    if(!pick?.starter){alert("Vous devez avoir participé à ce match pour utiliser Vidéo Jean-Marc.");return;}
+    if(bonus.videoJeanMarcUsed){showToast("🔒 Bonus déjà utilisé","Vidéo Jean-Marc n'est utilisable qu'une seule fois sur toute la saison.");return;}
+    const result=await saveSecureBonus(match.id,"video_jean_marc");
+    if(!result.ok){showToast("Activation impossible",result.error?.message||"Erreur Supabase","error");return;}
+    bonus.videoJeanMarcByMatch=bonus.videoJeanMarcByMatch||{};
+    bonus.videoJeanMarcByMatch[match.id]=true; bonus.videoJeanMarcUsed=true; bonus.videoJeanMarcMatchId=match.id;
+    showToast("Vidéo Jean-Marc activée",match.name);
   }
-
-  if(type === "videoJeanMarc"){
-
-    const match = getLatestJeanMarcEligibleMatch();
-
-    if(!match){
-      alert("Vidéo Jean-Marc n'est disponible qu'après la fin du match.");
-      return;
-    }
-
-    const pick = getPickForMatch(state.user, match);
-    if(!pick || !pick.starter){
-      alert("Tu dois avoir participé à ce match pour utiliser Vidéo Jean-Marc.");
-      return;
-    }
-
-    if(bonus.videoJeanMarcUsed){
-      showToast(
-        "🔒 Bonus déjà utilisé",
-        "Vidéo Jean-Marc n'est utilisable qu'une seule fois sur toute la saison."
-      );
-      return;
-    }
-
-    bonus.videoJeanMarcByMatch =
-      bonus.videoJeanMarcByMatch || {};
-
-    bonus.videoJeanMarcByMatch[match.id] = true;
-    bonus.videoJeanMarcUsed = true;
-    bonus.videoJeanMarcMatchId = match.id;
-  }
-
-  writeUserBranch(
-    KEYS.bonuses,
-    state.user,
-    state.bonuses[state.user]
-  );
   render();
 }
+
+
 
 
 
@@ -3142,7 +4740,8 @@ function getFantasyScore(
 
   if(
     bonus.cocu &&
-    bonus.cocuMatchId === match.id
+    bonus.cocuMatchId === match.id &&
+    score > 0
   ){
 
     score *= 2;
@@ -3272,10 +4871,9 @@ function saveProno(){
 
   };
 
-  writeUserBranch(
-    KEYS.pronos,
-    state.user,
-    state.pronos[state.user]
+  saveSecureProno(
+    match.id,
+    state.pronos[state.user][match.id]
   )
   .then(result => {
 
@@ -3615,89 +5213,113 @@ function jokerLocked(match){
    RENDER PLAYERS
 ================================================== */
 
-function renderPlayers(){
 
-  renderPlayerMatchInfo();
+function renderBasketCourt(players,current,selectFn,locked=false,match=null,selectionLabel="Sélection"){
+  /*
+    13 emplacements maximum, répartis en deux camps.
+    La bande centrale (42% à 58%) reste volontairement libre :
+    aucun joueur ne recouvre le rond central / logo KOP 7.
+  */
+  // Répartition organique : 13 joueurs max, sans effet "grille scolaire".
+  // Les positions alternent profondeur et hauteur, tout en gardant le rond central libre.
+  const slots=[
+    [8,18],[9,72],
+    [21,12],[23,46],[21,82],
+    [36,25],[36,70],
+    [64,20],[64,75],
+    [78,42],[79,84],
+    [91,17],[91,66]
+  ];
 
-  const container =
-    document.getElementById("players");
+  const items=players.slice(0,13).map((player,index)=>{
+    const active=player.name===current;
+    const [left,top]=slots[index]||[10,10];
+    return `<button type="button" class="court-player ${active?"selected":""}"
+      style="left:${left}%;top:${top}%"
+      ${locked?"disabled":""}
+      onclick="${locked?"":`${selectFn}('${escapeAttr(player.name)}')`}">
+      <span class="court-photo-wrap">
+        <img src="${player.photo}" alt="${escapeHTML(player.name)}" class="court-player-photo">
+        ${active?'<span class="court-check">✓</span>':""}
+      </span>
+      <span class="court-player-name">${escapeHTML(player.name)}</span>
+    </button>`;
+  }).join("");
 
-  const match =
-    getCurrentMatch();
+  const selected=players.find(p=>p.name===current);
+  const logoSrc=document.querySelector(".header-logo")?.src||"";
+  const teams=match?getMatchTeams(match):null;
+  const leftName=teams?(teams.venue==="away"?teams.opponent:"Limoges CSP"):"";
+  const rightName=teams?(teams.venue==="away"?"Limoges CSP":teams.opponent):"";
+  const leftLogo=teams?(teams.venue==="away"?match?.opponentImageUrl:match?.cspImageUrl):null;
+  const rightLogo=teams?(teams.venue==="away"?match?.cspImageUrl:match?.opponentImageUrl):null;
 
-  const selectionOpen =
-    matchChoicesOpen(match);
+  return `<div class="fantasy-match-head concept-match-head">
+      <div class="concept-team">
+        ${leftLogo?`<img src="${escapeAttr(leftLogo)}" alt="">`:""}
+        <strong>${escapeHTML(leftName)}</strong>
+      </div>
+      <div class="concept-match-center">
+        <div class="small">${match?formatDateTime(match.start):""}</div>
+        <b>VS</b>
+      </div>
+      <div class="concept-team concept-team-right">
+        ${rightLogo?`<img src="${escapeAttr(rightLogo)}" alt="">`:""}
+        <strong>${escapeHTML(rightName)}</strong>
+      </div>
+    </div>
 
-  const search =
-    (
-      document
-        .getElementById("playerSearch")
-        ?.value || ""
-    )
-    .toLowerCase()
-    .trim();
-
-  const currentPick =
-    getPickForMatch(
-      state.user,
-      match
-    );
-
-  const current =
-    currentPick?.starter;
-
-  const filtered =
-    PLAYERS.filter(player =>
-      player.name
-        .toLowerCase()
-        .includes(search)
-    );
-
-  container.innerHTML =
-    filtered.map(player => {
-
-      const active =
-        player.name === current;
-
-      return `
-
-        <div
-          class="player ${active ? "active" : ""}"
-          onclick="${
-            selectionOpen
-              ? `selectPlayer('${escapeAttr(player.name)}')`
-              : ""
-          }"
-          style="${
-            selectionOpen
-              ? ""
-              : "cursor:not-allowed;opacity:.65"
-          }"
-        >
-
-          <img
-            src="${player.photo}"
-            alt="${escapeHTML(player.name)}"
-            class="player-photo"
-          >
-
-          <div class="player-name">
-            ${escapeHTML(player.name)}
-          </div>
-
-          <div class="player-status">
-            ${active ? "✓ TITULAIRE" : ""}
-          </div>
-
+    <div class="court-selection-layout">
+      <div class="basket-court-wrap">
+        <div class="basket-court">
+          <div class="court-half-line"></div>
+          <div class="court-center-circle"></div>
+          ${logoSrc?`<img class="court-kop-logo" src="${logoSrc}" alt="">`:""}
+          <div class="court-key court-key-left"></div><div class="court-key court-key-right"></div>
+          <div class="court-hoop court-hoop-left"></div><div class="court-hoop court-hoop-right"></div>
+          <div class="court-arc court-arc-left"></div><div class="court-arc court-arc-right"></div>
+          ${items}
         </div>
-
-      `;
-
-    }).join("");
-
-  renderJokers();
-
+      </div>
+      <aside class="court-selection-card ${selected?"has-selection":""}">
+        <div class="small">${escapeHTML(selectionLabel)}</div>
+        ${selected?`
+          <span class="selection-photo-wrap">
+            <img src="${selected.photo}" alt="${escapeHTML(selected.name)}">
+            <span class="selection-check">✓</span>
+          </span>
+          <strong>${escapeHTML(selected.name)}</strong>
+        `:'<div class="selection-empty">Touchez un joueur sur le terrain</div>'}
+      </aside>
+    </div>`;
 }
+function renderPlayers(){
+  renderPlayerMatchInfo();
+  const container=document.getElementById("players");
+  const match=getCurrentMatch();
+  const selectionOpen=matchChoicesOpen(match);
+  const currentPick=getPickForMatch(state.user,match);
+  const current=currentPick?.starter;
+
+  container.innerHTML=renderBasketCourt(
+    PLAYERS,
+    current,
+    "selectPlayer",
+    !selectionOpen,
+    match,
+    "Joueur titulaire"
+  );
+
+  if(!selectionOpen && match){
+    container.insertAdjacentHTML("beforeend",`
+      <div class="info small court-lock-message">
+        🔒 La sélection du titulaire n'est pas ouverte pour ce match.
+      </div>`);
+  }
+  renderJokers();
+}
+
+
 
 
 /* ==================================================
@@ -3705,97 +5327,36 @@ function renderPlayers(){
 ================================================== */
 
 function renderJokers(){
-
-  const container =
-    document.getElementById("jokerPlayers");
-
-  const match =
-    getCurrentMatch();
-
-  const pick =
-    getPickForMatch(
-      state.user,
-      match
-    );
+  const container=document.getElementById("jokerPlayers");
+  const match=getCurrentMatch();
+  const pick=getPickForMatch(state.user,match);
 
   if(!pick || !pick.starter){
-
-    container.innerHTML =
-      `<div class="small">
-        Choisis d'abord ton titulaire.
-      </div>`;
-
+    container.innerHTML=`<div class="info small">Choisis d'abord ton titulaire pour accéder au joueur banc.</div>`;
     return;
   }
 
-  const current =
-    pick.joker;
+  const locked=match && jokerLocked(match);
+  const availablePlayers=PLAYERS.filter(player=>player.name!==pick.starter);
 
-  const locked =
-    match &&
-    jokerLocked(match);
-
-  container.innerHTML =
-    PLAYERS
-      .filter(
-        player =>
-          player.name !== pick.starter
-      )
-      .map(player => {
-
-        const active =
-          player.name === current;
-
-        return `
-
-          <div
-            class="player ${active ? "active" : ""}"
-            onclick="${
-              locked
-                ? ""
-                : `selectJoker('${escapeAttr(player.name)}')`
-            }"
-            style="${
-              locked
-                ? "cursor:not-allowed;opacity:.65"
-                : ""
-            }"
-          >
-
-            <img
-              src="${player.photo}"
-              alt="${escapeHTML(player.name)}"
-              class="player-photo"
-            >
-
-            <div class="player-name">
-              ${escapeHTML(player.name)}
-            </div>
-
-            <div class="player-status">
-              ${active ? "✓ JOKER" : ""}
-            </div>
-
-          </div>
-
-        `;
-
-      }).join("");
+  container.innerHTML=renderBasketCourt(
+    availablePlayers,
+    pick.joker,
+    "selectJoker",
+    locked,
+    match,
+    "Joueur banc"
+  );
 
   if(locked){
-
-    container.innerHTML += `
-
-      <div class="info small">
-        🔒 Joker verrouillé : le délai de 5 minutes
-        après le début du match est dépassé.
-      </div>
-
-    `;
-
+    container.insertAdjacentHTML("beforeend",`
+      <div class="info small court-lock-message">
+        🔒 Joueur banc verrouillé : le délai de 5 minutes après le début du match est dépassé.
+      </div>`);
   }
-
 }
+
+
 
 
 /* ==================================================
@@ -3853,19 +5414,18 @@ function renderBonuses(){
     );
 
 
+  // "Sélectionné" signifie uniquement : bonus réellement activé
+  // sur le match éligible terminé. Un match à venir ne doit jamais
+  // hériter visuellement d'un bonus utilisé sur un ancien match.
   let jeanMarcActive = false;
 
-
   if(lastFinishedMatch){
-
     jeanMarcActive =
+      String(bonus.videoJeanMarcMatchId ?? "") === String(lastFinishedMatch.id ?? "") ||
       !!(
         bonus.videoJeanMarcByMatch &&
-        bonus.videoJeanMarcByMatch[
-          lastFinishedMatch.id
-        ]
+        bonus.videoJeanMarcByMatch[String(lastFinishedMatch.id)]
       );
-
   }
 
 
@@ -3991,7 +5551,7 @@ function renderBonuses(){
         </div>
 
         <div class="bonus-description">
-          Double les points +/- de ton joueur
+          Double le +/- positif de votre joueur
           sur ce match.
           <br>
           <strong>Utilisable une seule fois sur toute la saison.</strong>
@@ -4034,7 +5594,7 @@ function renderBonuses(){
           : ""
       }"
 
-      onclick="${lastFinishedMatch && !jeanMarcUsedSeason ? "toggleBonus('videoJeanMarc')" : ""}"
+      onclick=""
     >
 
 
@@ -4080,7 +5640,7 @@ function renderBonuses(){
                     ? "✅ Vidéo Jean-Marc activée pour ce match"
                     : (jeanMarcUsedSeason
                         ? "🔒 Déjà utilisée cette saison"
-                        : "Disponible : clique pour l'activer")
+                        : "🟠 Activable après le match depuis l’onglet Résultat")
                 }
 
               </div>
@@ -4112,14 +5672,7 @@ function renderBonuses(){
         lastFinishedMatch
           ? `
 
-            <input
-              type="checkbox"
-              ${jeanMarcActive ? "checked" : ""}
-              onclick="
-                event.stopPropagation();
-                toggleBonus('videoJeanMarc')
-              "
-            >
+<span class="small" style="font-weight:800;color:#ff9f1c">Activation dans Résultat</span>
 
           `
           : ""
@@ -4129,6 +5682,37 @@ function renderBonuses(){
     </div>
 
   `;
+
+  // Bonus configurables actifs — affichés avec Cocu / Vidéo JM dans Fantasy > Bonus.
+  const dynamicDefs=(state.bonusDefinitions||[])
+    .filter(b=>b.active && b.special_rule==="generic");
+
+  if(dynamicDefs.length && currentMatch){
+    container.insertAdjacentHTML("beforeend", dynamicDefs.map(b=>{
+      const rows=(state.secureBonuses||[]).filter(x=>x.bonus_type===b.code);
+      const active=rows.some(x=>String(x.match_id)===String(currentMatch.secureId));
+      const used=rows.length;
+      const max=Math.max(1,Number(b.max_uses_per_season||1));
+      const started=new Date()>=new Date(currentMatch.start);
+      const locked=!active && (used>=max || started);
+
+      return `
+        <div class="bonus dynamic-bonus ${active?"active":""} ${locked?"locked":""}"
+             ${locked?"":`onclick="toggleDynamicBonus('${escapeAttr(b.code)}')"`}>
+          ${b.image_url?`<img class="bonus-photo-cover" src="${escapeAttr(b.image_url)}" alt="${escapeAttr(b.name)}">`:""}
+          <div style="flex:1">
+            <div class="bonus-title">${escapeHTML(b.name)}</div>
+            ${b.description?`<div class="small">${escapeHTML(b.description)}</div>`:""}
+            <div class="small" style="margin-top:5px"><strong>${escapeHTML(formatBonusEffect(b))}</strong></div>
+            <div class="small" style="margin-top:4px">
+              ${active?"✅ Activé sur ce match":locked?(used>=max?"🔒 Limite d'utilisation atteinte":"🔒 Match commencé"):`Disponible · ${used}/${max} utilisée(s)`}
+            </div>
+          </div>
+          <input type="checkbox" ${active?"checked":""} ${locked?"disabled":""}
+                 onclick="event.stopPropagation();${locked?"":`toggleDynamicBonus('${escapeAttr(b.code)}')`}">
+        </div>`;
+    }).join(""));
+  }
 
 }
 
@@ -4251,96 +5835,69 @@ function setRankingMode(mode){
 }
 
 
-function getMatchFantasyScore(
-  user,
-  match
-){
+function getMatchFantasyBreakdown(user,match){
+  const pick=getPickForMatch(user,match);
+  if(!pick||!pick.starter) return {player:0,bonusPoints:0,bonusDetails:[]};
 
-  const pick =
-    getPickForMatch(
-      user,
-      match
-    );
+  const player=Number(getEffectiveScore(user,match)||0);
+  const bonus=state.bonuses[user]||{};
+  let bonusPoints=0;
+  const bonusDetails=[];
 
-  if(!pick || !pick.starter){
-    return 0;
+  if(bonus.cocu && bonus.cocuMatchId===match.id && player!==0){
+    bonusPoints+=player;
+    bonusDetails.push({name:"Cocu",points:player});
+  }
+  if(bonus.videoJeanMarcByMatch && bonus.videoJeanMarcByMatch[match.id]){
+    bonusPoints-=player;
+    bonusDetails.push({name:"Vidéo Jean-Marc",points:-player});
   }
 
-  const bonus =
-    state.bonuses[user] || {};
-
-  let score =
-    getEffectiveScore(
-      user,
-      match
-    );
-
-  if(
-    bonus.cocu &&
-    bonus.cocuMatchId === match.id
-  ){
-    score *= 2;
+  // Les bonus configurables sont lus depuis Supabase pour l'utilisateur connecté.
+  if(user===state.user){
+    const dynamic=getDynamicBonusEffectForCurrentUser(match,player);
+    bonusPoints+=dynamic.points;
+    bonusDetails.push(...dynamic.details);
   }
-
-  if(
-    bonus.videoJeanMarcByMatch &&
-    bonus.videoJeanMarcByMatch[match.id]
-  ){
-    score = 0;
-  }
-
-  return score;
-
+  return {player,bonusPoints,bonusDetails};
 }
 
+function getMatchFantasyScore(user,match){
+  const b=getMatchFantasyBreakdown(user,match);
+  return b.player+b.bonusPoints;
+}
 
 function getMatchRankingEntry(user, match){
+  if(!isUserEligibleForMatch(user,match)){
+    return {user,eligible:false,starter:null,effectivePlayer:null,predictedCsp:null,predictedOpponent:null,cocuActive:false,jeanMarcActive:false,noParticipation:false,penalty:0,playerPoints:0,bonusPoints:0,bonusDetails:[],fantasy:0,prono:0,cestPasFini:0,total:0};
+  }
+  const noParticipation=isNoParticipation(user,match);
+  const breakdown=noParticipation
+    ? {player:getWorstPlayerScore(match),bonusPoints:0,bonusDetails:[]}
+    : getMatchFantasyBreakdown(user,match);
 
-  const noParticipation = isNoParticipation(user, match);
-
-  const fantasy = noParticipation
-    ? getWorstPlayerScore(match)
-    : getMatchFantasyScore(user, match);
-
-  const userProno = state.pronos[user]?.[match.id];
-
-  const prono = noParticipation
-    ? 0
-    : getPronoPoints(userProno, match);
-
-  const cestPasFini = noParticipation
-    ? 0
-    : getCestPasFiniPoints(user, match);
-
-  const pick = getPickForMatch(user, match);
-  const bonus = state.bonuses[user] || {};
-
-  const cocuActive = !!(
-    bonus.cocu &&
-    bonus.cocuMatchId === match.id
-  );
-
-  const jeanMarcActive = !!(
-    bonus.videoJeanMarcByMatch &&
-    bonus.videoJeanMarcByMatch[match.id]
-  );
-
-  const penalty = noParticipation ? -10 : 0;
+  const userProno=state.pronos[user]?.[match.id];
+  const prono=noParticipation?0:getPronoPoints(userProno,match);
+  const cestPasFini=noParticipation?0:getCestPasFiniPoints(user,match);
+  const pick=getPickForMatch(user,match);
+  const bonus=state.bonuses[user]||{};
+  const cocuActive=!!(bonus.cocu&&bonus.cocuMatchId===match.id);
+  const jeanMarcActive=!!(bonus.videoJeanMarcByMatch&&bonus.videoJeanMarcByMatch[match.id]);
+  const penalty=noParticipation?-10:0;
+  const fantasy=breakdown.player+breakdown.bonusPoints;
 
   return {
-    user,
-    starter: pick?.starter || null,
-    effectivePlayer: getEffectivePlayer(user, match),
-    predictedCsp: userProno?.csp ?? null,
-    predictedOpponent: userProno?.opponent ?? null,
-    cocuActive,
-    jeanMarcActive,
-    noParticipation,
-    penalty,
-    fantasy,
-    prono,
-    cestPasFini,
-    total: fantasy + prono + cestPasFini + penalty
+    user,eligible:true,
+    starter:pick?.starter||null,
+    effectivePlayer:getEffectivePlayer(user,match),
+    predictedCsp:userProno?.csp??null,
+    predictedOpponent:userProno?.opponent??null,
+    cocuActive,jeanMarcActive,noParticipation,penalty,
+    playerPoints:breakdown.player,
+    bonusPoints:breakdown.bonusPoints,
+    bonusDetails:breakdown.bonusDetails,
+    fantasy,prono,cestPasFini,
+    total:fantasy+prono+cestPasFini+penalty
   };
 }
 
@@ -4414,7 +5971,7 @@ function renderRanking(){
 
   if(rankingMode === "last" && targetMatch){
 
-    const ranking = users.map(u => getMatchRankingEntry(u,targetMatch))
+    const ranking = users.filter(u=>isUserEligibleForMatch(u,targetMatch)).map(u => getMatchRankingEntry(u,targetMatch))
       .sort((a,b)=>b.total-a.total || a.user.localeCompare(b.user,"fr"));
 
     const winner = ranking[0]?.user;
@@ -4458,7 +6015,7 @@ function renderRanking(){
             value="${escapeAttr(String(match.id))}"
             ${String(match.id) === String(targetMatch.id) ? "selected" : ""}
           >
-            ${escapeHTML(match.name)} — ${new Date(match.start).toLocaleDateString("fr-FR")}
+            ${escapeHTML(match.name)} — ${formatHistoryMatchDate(match)}
           </option>
         `)
         .join("");
@@ -4600,6 +6157,115 @@ function renderMatchResultContent(match){
 }
 
 
+
+function getVideoJeanMarcTargetMatch(){
+  const now=new Date();
+  return [...(state.matches||[])]
+    .filter(match=>{
+      if(!match?.start || new Date(match.start)>now) return false;
+      const openAt=getJeanMarcOpenDate(match);
+      return openAt && now>=openAt;
+    })
+    .sort((a,b)=>new Date(b.start)-new Date(a.start))[0]||null;
+}
+
+function renderVideoJeanMarcPostMatch(){
+  if(!state.user) return "";
+
+  const bonus=state.bonuses[state.user]||{};
+  const target=getVideoJeanMarcTargetMatch();
+
+  if(bonus.videoJeanMarcUsed){
+    const usedMatch=(state.matches||[]).find(m=>
+      String(m.id)===String(bonus.videoJeanMarcMatchId)
+    );
+    return `
+      <div class="postmatch-bonus-card used">
+        <div>
+          <strong>🎬 Vidéo Jean-Marc</strong>
+          <div class="small">
+            Bonus déjà utilisé cette saison${usedMatch?` sur ${escapeHTML(usedMatch.name)}`:""}.
+          </div>
+        </div>
+        <span class="auto-bonus-badge">Utilisé</span>
+      </div>`;
+  }
+
+  if(!target){
+    const latestStarted=getLatestStartedMatch();
+    const openAt=latestStarted?getJeanMarcOpenDate(latestStarted):null;
+    return `
+      <div class="postmatch-bonus-card locked">
+        <div>
+          <strong>🎬 Vidéo Jean-Marc</strong>
+          <div class="small">
+            ${openAt && new Date()<openAt
+              ? `Disponible après le match, à partir du ${formatDateTime(openAt)}.`
+              : "Aucun match terminé éligible pour le moment."}
+          </div>
+        </div>
+        <span class="auto-bonus-badge">Verrouillé</span>
+      </div>`;
+  }
+
+  const pick=getPickForMatch(state.user,target);
+  if(!pick?.starter){
+    return `
+      <div class="postmatch-bonus-card locked">
+        <div>
+          <strong>🎬 Vidéo Jean-Marc</strong>
+          <div class="small">${escapeHTML(target.name)} — vous n'avez pas de titulaire enregistré sur ce match.</div>
+        </div>
+      </div>`;
+  }
+
+  return `
+    <div class="postmatch-bonus-card available">
+      <div>
+        <strong>🎬 Vidéo Jean-Marc</strong>
+        <div class="small">
+          Disponible pour <strong>${escapeHTML(target.name)}</strong>.
+          Ramène le +/- de votre joueur à 0. Une seule utilisation sur la saison.
+        </div>
+      </div>
+      <button class="btn" onclick="activateVideoJeanMarcFromResults('${escapeAttr(target.id)}')">
+        Utiliser sur ce match
+      </button>
+    </div>`;
+}
+
+async function activateVideoJeanMarcFromResults(matchId){
+  if(!authUser||!state.user) return;
+
+  const match=(state.matches||[]).find(m=>String(m.id)===String(matchId));
+  if(!match){showToast("Match introuvable","","error");return;}
+
+  const openAt=getJeanMarcOpenDate(match);
+  if(!openAt || new Date()<openAt){
+    showToast("Bonus verrouillé","Ce match n'est pas encore terminé.","error");
+    return;
+  }
+
+  const bonus=state.bonuses[state.user]||{};
+  if(bonus.videoJeanMarcUsed){
+    showToast("Bonus déjà utilisé","Vidéo Jean-Marc n'est utilisable qu'une seule fois sur la saison.");
+    return;
+  }
+
+  if(!confirm(`Utiliser Vidéo Jean-Marc sur ${match.name} ?\n\nCette action consommera votre bonus unique de la saison.`)) return;
+
+  const result=await saveSecureBonus(match.id,"video_jean_marc");
+  if(!result.ok){
+    showToast("Activation impossible",result.error?.message||"Erreur Supabase","error");
+    return;
+  }
+
+  await loadSecureExtras();
+  renderMatches();
+  renderRanking();
+  showToast("Vidéo Jean-Marc activée",match.name);
+}
+
 function renderMatches(){
 
   const container =
@@ -4627,6 +6293,7 @@ function renderMatches(){
       );
 
   container.innerHTML =
+    renderVideoJeanMarcPostMatch() +
     sortedMatches
       .map(match => {
 
@@ -4717,49 +6384,113 @@ function renderMatches(){
 
 function adminLogin(){
 
-  const password =
-    document
-      .getElementById("adminPassword")
-      .value;
-
-
-  if(password !== ADMIN_PASSWORD){
+  if(!authUser || !authProfile){
 
     alert(
-      "Mot de passe incorrect."
+      "Connectez-vous d'abord avec votre compte."
     );
 
     return;
 
   }
 
+  if(!authProfile.is_admin){
+
+    showToast(
+      "Accès refusé",
+      "Ce compte n'est pas administrateur.",
+      "error"
+    );
+
+    return;
+
+  }
 
   state.admin = true;
-
 
   document
     .getElementById("adminLogin")
     .classList.add("hidden");
 
-
   document
     .getElementById("adminPanel")
     .classList.remove("hidden");
-
 
   renderAdmin();
 
 }
 
 
+
+
 /* ==================================================
    ADMIN RENDER
 ================================================== */
 
-function renderAdmin(){
 
+function initAdminSections(){
+  const panel=document.getElementById("adminPanel"); if(!panel)return;
+
+  // La première carte historique mélangeait Match et Effectif.
+  // On déplace physiquement le bloc Effectif dans une carte Joueurs dédiée.
+  const roster=document.getElementById("adminRoster");
+  if(roster && !document.getElementById("adminPlayersManagementCard")){
+    const sourceCard=roster.closest(".card");
+    const heading=[...sourceCard.querySelectorAll("h3")].find(x=>(x.textContent||"").includes("Effectif CSP"));
+    const manager=heading?.nextElementSibling;
+    const card=document.createElement("div");
+    card.className="card";
+    card.id="adminPlayersManagementCard";
+    card.dataset.adminSection="players";
+    const title=document.createElement("h3");
+    title.textContent="👥 Effectif CSP";
+    card.appendChild(title);
+    if(manager?.classList.contains("admin-player-manager")) card.appendChild(manager);
+    card.appendChild(roster);
+    heading?.remove();
+    panel.insertBefore(card, [...panel.children].find(x=>x.classList?.contains("card"))?.nextSibling || null);
+  }
+
+  [...panel.querySelectorAll(":scope > .card")].forEach(card=>{
+    if(card.id==="adminPlayersManagementCard"){card.dataset.adminSection="players";return;}
+    const text=(card.textContent||"").toLowerCase();
+
+    // Tout ce qui concerne création, résultat, +/- et liste des matchs reste ensemble.
+    if(card.querySelector("#adminPlayers") || card.querySelector("#adminMatches") ||
+       card.querySelector("#matchName") || card.querySelector("#resultCsp") ||
+       card.querySelector("#adminGameStats")){
+      card.dataset.adminSection="matches";
+    }else if(card.querySelector("#adminBonusDefinitions")){
+      card.dataset.adminSection="bonuses";
+    }else if(card.querySelector("#adminUsers") || card.querySelector("#historyUserButtons") ||
+             card.querySelector("#restoreBonusUser")){
+      card.dataset.adminSection="users";
+    }else if(text.includes("retour")){
+      card.dataset.adminSection="feedback";
+    }else{
+      card.dataset.adminSection="matches";
+    }
+  });
+
+  const active=panel.querySelector(".admin-subtab.active")||panel.querySelector(".admin-subtab");
+  showAdminSection(active?.dataset?.section||"matches",active);
+}
+function showAdminSection(section,button){
+  const panel=document.getElementById("adminPanel"); if(!panel)return;
+  [...panel.querySelectorAll(":scope > .card")].forEach(card=>{
+    card.classList.toggle("hidden",card.dataset.adminSection!==section);
+  });
+  panel.querySelectorAll(".admin-subtab").forEach(b=>b.classList.remove("active"));
+  button?.classList.add("active");
+}
+
+function renderAdmin(){
+  initAdminSections();
+
+  renderAdminRoster();
   renderAdminPlayers();
   renderAdminMatches();
+  renderAdminBonusDefinitions();
   renderAdminUsers();
   renderHistoricalPickEditor();
   renderRestoreBonusUsers();
@@ -4772,6 +6503,595 @@ function renderAdmin(){
 /* ==================================================
    ADMIN PLAYERS
 ================================================== */
+
+
+
+
+async function uploadBonusPhoto(file){
+  if(!file) return null;
+  if(file.size>3*1024*1024) throw new Error("La photo dépasse 3 Mo.");
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)) throw new Error("Format accepté : JPG, PNG ou WebP.");
+  const ext=(file.name.split(".").pop()||"jpg").toLowerCase();
+  const path=`bonuses/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const {error}=await db.storage.from("bonus-photos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+  if(error) throw error;
+  return db.storage.from("bonus-photos").getPublicUrl(path).data.publicUrl;
+}
+
+function formatHistoryFinalScore(match){
+  if(!match)return "—";
+  const csp=match.resultCsp ?? match.cspScore ?? match.csp_score ?? null;
+  const opp=match.resultOpponent ?? match.opponentScore ?? match.opponent_score ?? null;
+  if(csp===null || csp===undefined || opp===null || opp===undefined || csp==="" || opp==="")return "—";
+  const venue=String(match.venue||"home").toLowerCase();
+  return venue==="away" ? `${opp}-${csp}` : `${csp}-${opp}`;
+}
+
+function formatHistoryMatchDate(match){
+  const raw=match?.start || match?.start_at || match?.date || match?.matchDate || null;
+  if(!raw)return "";
+  const d=new Date(raw);
+  if(Number.isNaN(d.getTime()))return "";
+  return d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"numeric"});
+}
+
+function formatBonusEffect(def){
+  if(!def) return "Aucun effet";
+  if(def.special_rule==="cocu") return "Double le +/- du joueur";
+  if(def.special_rule==="video_jean_marc") return "Annule le +/- du joueur";
+  const type=def.score_effect_type||"none";
+  const value=Number(def.score_effect_value||0);
+  if(type==="add_points") return `+${value} points`;
+  if(type==="subtract_points") return `-${Math.abs(value)} points`;
+  if(type==="multiply_player") return `×${value} sur le +/- joueur`;
+  if(type==="cancel_player") return "Annule le +/- du joueur";
+  return "Aucun effet";
+}
+function syncBonusEffectFields(){
+  const rule=document.getElementById("bonusDefRule");
+  const effect=document.getElementById("bonusDefEffect");
+  const value=document.getElementById("bonusDefEffectValue");
+  const preview=document.getElementById("bonusEffectPreview");
+  if(!rule||!effect||!value||!preview)return;
+  if(rule.value==="cocu"){effect.value="multiply_player";value.value="2";}
+  if(rule.value==="video_jean_marc"){effect.value="cancel_player";}
+  const needsValue=["add_points","subtract_points","multiply_player"].includes(effect.value);
+  value.disabled=!needsValue || rule.value!=="generic";
+  effect.disabled=rule.value!=="generic";
+  const sample={special_rule:rule.value,score_effect_type:effect.value,score_effect_value:Number(value.value||0)};
+  preview.textContent=`Effet : ${formatBonusEffect(sample)}. Exemple avec un joueur à +8 : ${describeBonusPreview(sample,8)}.`;
+}
+function describeBonusPreview(def,base){
+  const effect=getBonusEffectDelta(def,base);
+  return `${base+effect>=0?"+":""}${base+effect} pts joueur+bonus (${effect>=0?"+":""}${effect} via bonus)`;
+}
+function getBonusDefinition(code){
+  return (state.bonusDefinitions||[]).find(b=>b.code===code)||null;
+}
+function getBonusEffectDelta(def,basePlayerScore){
+  if(!def)return 0;
+  if(def.special_rule==="cocu") return basePlayerScore;
+  if(def.special_rule==="video_jean_marc") return -basePlayerScore;
+  const type=def.score_effect_type||"none";
+  const value=Number(def.score_effect_value||0);
+  if(type==="add_points") return value;
+  if(type==="subtract_points") return -Math.abs(value);
+  if(type==="multiply_player") return basePlayerScore*(value-1);
+  if(type==="cancel_player") return -basePlayerScore;
+  return 0;
+}
+function getSecureBonusRowsForMatch(match){
+  if(!match)return[];
+  return (state.secureBonuses||[]).filter(r=>String(r.match_id)===String(match.secureId));
+}
+function getDynamicBonusEffectForCurrentUser(match,basePlayerScore){
+  const rows=getSecureBonusRowsForMatch(match);
+  let points=0;
+  const details=[];
+  for(const row of rows){
+    if(["cocu","video_jean_marc"].includes(row.bonus_type))continue;
+    const def=getBonusDefinition(row.bonus_type);
+    if(!def)continue;
+    const delta=getBonusEffectDelta(def,basePlayerScore);
+    points+=delta;
+    details.push({code:def.code,name:def.name,points:delta});
+  }
+  return {points,details};
+}
+
+function renderAdminBonusDefinitions(){
+  const el=document.getElementById("adminBonusDefinitions");
+  if(!el)return;
+  const defs=[...(state.bonusDefinitions||state.secureBonusDefinitions||[])].sort((a,b)=>{
+    if(!!a.active!==!!b.active)return a.active?-1:1;
+    return String(a.name||a.code).localeCompare(String(b.name||b.code),"fr");
+  });
+  if(!defs.length){el.innerHTML='<div class="small">Aucun bonus configuré.</div>';return;}
+  el.innerHTML=`
+    <div class="bonus-admin-list">
+      ${defs.map(b=>`
+        <div class="bonus-admin-row ${b.active?"":"is-paused"}">
+          <div class="bonus-admin-main">
+            ${b.image_url?`<img src="${escapeAttr(b.image_url)}" alt="">`:`<div class="bonus-admin-placeholder"></div>`}
+            <div>
+              <strong>${escapeHTML(b.name)}</strong>
+              <div class="small">${escapeHTML(b.code)}</div>
+            </div>
+          </div>
+          <div>
+            <div class="bonus-admin-status">${b.active?"🟢 Actif":"⏸ En pause"}</div>
+            <div class="small"><strong>${escapeHTML(formatBonusEffect(b))}</strong></div>
+            <div class="small">${Number(b.max_uses_per_season||1)} utilisation(s)/saison</div>
+          </div>
+          <div class="bonus-admin-actions">
+            <button class="btn-secondary" onclick="editBonusDefinition('${escapeAttr(b.id)}')">Modifier</button>
+            <button class="btn-secondary" onclick="adminToggleBonusDefinition('${escapeAttr(b.id)}',${b.active})">${b.active?"Mettre en pause":"Réactiver"}</button>
+            <button class="btn-secondary bonus-delete-btn" onclick="adminDeleteBonusDefinition('${escapeAttr(b.id)}')">Supprimer</button>
+          </div>
+        </div>`).join("")}
+    </div>`;
+}
+function editBonusDefinition(id){
+  const b=(state.bonusDefinitions||state.secureBonusDefinitions||[]).find(x=>String(x.id)===String(id)); if(!b)return;
+  editingBonusDefinitionId=b.id;
+  document.getElementById("bonusDefName").value=b.name||"";
+  document.getElementById("bonusDefCode").value=b.code||"";
+  document.getElementById("bonusDefCode").disabled=true;
+  document.getElementById("bonusDefPhotoInfo").textContent=b.image_url?"Photo actuelle conservée si vous n'en choisissez pas une nouvelle.":"JPG, PNG ou WebP · 3 Mo maximum";
+  document.getElementById("bonusDefMaxUses").value=Number(b.max_uses_per_season||1);
+  document.getElementById("bonusDefRule").value=b.special_rule||"generic";
+  document.getElementById("bonusDefEffect").value=b.score_effect_type||"add_points";
+  document.getElementById("bonusDefEffectValue").value=b.score_effect_value??5;
+  document.getElementById("bonusDefDescription").value=b.description||"";
+  syncBonusEffectFields();
+  document.getElementById("saveBonusDefButton").textContent="Enregistrer les modifications";
+  document.getElementById("cancelBonusDefEditButton").classList.remove("hidden");
+}
+function cancelBonusDefinitionEdit(){
+  editingBonusDefinitionId=null;
+  ["bonusDefName","bonusDefCode","bonusDefDescription"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("bonusDefPhoto").value="";
+  document.getElementById("bonusDefPhotoInfo").textContent="JPG, PNG ou WebP · 3 Mo maximum";
+  document.getElementById("bonusDefCode").disabled=false;
+  document.getElementById("bonusDefMaxUses").value="1";
+  document.getElementById("bonusDefRule").value="generic";
+  document.getElementById("bonusDefEffect").value="add_points";
+  document.getElementById("bonusDefEffectValue").value="5";
+  syncBonusEffectFields();
+  document.getElementById("saveBonusDefButton").textContent="Ajouter le bonus";
+  document.getElementById("cancelBonusDefEditButton").classList.add("hidden");
+}
+async function adminSaveBonusDefinition(){
+  if(!authProfile?.is_admin)return;
+  try{
+    const existing=(state.bonusDefinitions||[]).find(x=>String(x.id)===String(editingBonusDefinitionId));
+    const file=document.getElementById("bonusDefPhoto")?.files?.[0]||null;
+    const newImage=file?await uploadBonusPhoto(file):(existing?.image_url||null);
+
+    const payload={
+      name:(document.getElementById("bonusDefName").value||"").trim(),
+      code:(document.getElementById("bonusDefCode").value||"").trim().toLowerCase().replace(/[^a-z0-9_]+/g,"_"),
+      image_url:newImage,
+      max_uses_per_season:Number(document.getElementById("bonusDefMaxUses").value||1),
+      special_rule:document.getElementById("bonusDefRule").value,
+      score_effect_type:document.getElementById("bonusDefEffect").value,
+      score_effect_value:["add_points","subtract_points","multiply_player"].includes(document.getElementById("bonusDefEffect").value)
+        ? Number(document.getElementById("bonusDefEffectValue").value||0)
+        : null,
+      description:(document.getElementById("bonusDefDescription").value||"").trim()||null,
+      updated_at:new Date().toISOString()
+    };
+    if(!payload.name||!payload.code){alert("Renseignez le nom et le code du bonus.");return;}
+    let error;
+    if(editingBonusDefinitionId) ({error}=await db.from("bonus_definitions").update(payload).eq("id",editingBonusDefinitionId));
+    else {payload.active=true;({error}=await db.from("bonus_definitions").insert(payload));}
+    if(error) throw error;
+    cancelBonusDefinitionEdit();await loadSecureExtras();renderAdminBonusDefinitions();
+    showToast("Bonus enregistré",payload.name);
+  }catch(error){showToast("Enregistrement impossible",error.message||"Erreur Supabase","error");}
+}
+async function adminToggleBonusDefinition(id,active){
+  if(!authProfile?.is_admin)return;
+  const {error}=await db.from("bonus_definitions").update({active:!active,updated_at:new Date().toISOString()}).eq("id",id);
+  if(error){showToast("Modification impossible",error.message,"error");return;}
+  await loadSecureExtras();renderAdminBonusDefinitions();showToast(active?"Bonus désactivé":"Bonus réactivé");
+}
+
+async function adminDeleteBonusDefinition(id){
+  if(!authProfile?.is_admin)return;
+  const def=(state.bonusDefinitions||state.secureBonusDefinitions||[]).find(x=>String(x.id)===String(id));
+  if(!def)return;
+
+  const {count,error:countError}=await db.from("bonuses")
+    .select("*",{count:"exact",head:true})
+    .eq("bonus_type",def.code);
+
+  if(countError){showToast("Suppression impossible",countError.message,"error");return;}
+  if(Number(count||0)>0){
+    showToast("Suppression bloquée",`"${def.name}" a déjà été utilisé. Mettez-le en pause pour conserver l'historique.`,"error");
+    return;
+  }
+  if(!confirm(`Supprimer définitivement le bonus "${def.name}" ?`))return;
+
+  const {error}=await db.from("bonus_definitions").delete().eq("id",id);
+  if(error){showToast("Suppression impossible",error.message,"error");return;}
+  await loadSecureExtras();
+  renderAdminBonusDefinitions();
+  renderBonuses();
+  showToast("Bonus supprimé",def.name);
+}
+
+async function renderUserHistory(){
+  const el=document.getElementById("userHistory");
+  if(!el) return;
+  if(!authUser){
+    el.classList.add("hidden");
+    el.innerHTML="";
+    return;
+  }
+
+  // Le conteneur est masqué par défaut dans le HTML : il faut le rendre visible
+  // dès qu'une session Supabase est active.
+  el.classList.remove("hidden");
+  el.innerHTML='<div class="small">Chargement de votre historique…</div>';
+
+  try{
+    // Picks et pronos sont les sources normalisées fiables de l'historique utilisateur.
+    // Les bonus sont enrichis depuis state.bonuses pour ne pas faire échouer tout
+    // l'historique si le schéma bonus diffère entre deux versions de la base.
+    const [picksRes,pronosRes]=await Promise.all([
+      db.from("picks")
+        .select("match_id,starter_player_id,joker_player_id")
+        .eq("user_id",authUser.id),
+      db.from("pronos")
+        .select("match_id,predicted_csp_score,predicted_opponent_score")
+        .eq("user_id",authUser.id)
+    ]);
+
+    const err=picksRes.error||pronosRes.error;
+    if(err) throw err;
+
+    const playersById=Object.fromEntries(
+      (state.securePlayers||[]).map(p=>[String(p.id),p])
+    );
+    const picks=Object.fromEntries(
+      (picksRes.data||[]).map(x=>[String(x.match_id),x])
+    );
+    const pronos=Object.fromEntries(
+      (pronosRes.data||[]).map(x=>[String(x.match_id),x])
+    );
+
+    const matches=[...(state.matches||[])]
+      .filter(match=>isUserEligibleForMatch(state.user,match))
+      .sort((a,b)=>new Date(b.start)-new Date(a.start));
+
+    if(!matches.length){
+      el.innerHTML='<div class="small">Aucun match enregistré.</div>';
+      return;
+    }
+
+    const bonusState=state.bonuses?.[state.user]||{};
+
+    el.innerHTML=matches.map(match=>{
+      const key=String(match.secureId);
+      const pick=picks[key];
+      const prono=pronos[key];
+
+      const starter=pick
+        ? playersById[String(pick.starter_player_id)]?.name||null
+        : null;
+      const joker=pick?.joker_player_id
+        ? playersById[String(pick.joker_player_id)]?.name||null
+        : null;
+
+      const cocu=!!(
+        bonusState.cocu &&
+        String(bonusState.cocuMatchId)===String(match.id)
+      );
+      const video=!!(
+        bonusState.videoJeanMarcByMatch &&
+        bonusState.videoJeanMarcByMatch[match.id]
+      );
+
+      const has=!!pick||!!prono||cocu||video;
+      const teams=getMatchTeams(match);
+      const score=!prono
+        ? "—"
+        : teams.venue==="away"
+          ? `${prono.predicted_opponent_score}-${prono.predicted_csp_score}`
+          : `${prono.predicted_csp_score}-${prono.predicted_opponent_score}`;
+
+      let pointsHtml="", detailHtml="";
+      if(match.resultCsp!==null && match.resultOpponent!==null && has){
+        try{
+          const entry=getMatchRankingEntry(state.user,match);
+          const total=Number(entry.total||0);
+          pointsHtml=`<b class="history-fantasy-score">${total>=0?"+":""}${total}</b>`;
+
+          // Affichage transparent du calcul, sans changer le moteur de score.
+          const parts=[];
+          const playerPts=Number(entry.playerPoints||0);
+          const pronoPts=Number(entry.prono||0);
+          const autoBonus=Number(entry.cestPasFini||0);
+          const configuredBonus=Number(entry.bonusPoints||0);
+          const penalty=Number(entry.penalty||0);
+
+          parts.push(`<span><i>Joueur</i><b>${playerPts>=0?"+":""}${playerPts}</b></span>`);
+          parts.push(`<span><i>Prono</i><b>${pronoPts>=0?"+":""}${pronoPts}</b></span>`);
+          if(autoBonus) parts.push(`<span><i>C’est pas finiii</i><b>+${autoBonus}</b></span>`);
+          if(penalty) parts.push(`<span><i>Pénalité</i><b>${penalty}</b></span>`);
+          if(cocu) parts.push(`<span class="history-bonus-line"><i>Bonus Cocu</i><b>×2 joueur</b></span>`);
+          if(video) parts.push(`<span class="history-bonus-line"><i>Vidéo Jean-Marc</i><b>± joueur annulé</b></span>`);
+          // La ligne d'historique expose chaque composante du calcul séparément.
+          const bonusPts=autoBonus+configuredBonus;
+          const malusPts=penalty;
+          const bonusNames=[
+            ...(entry.bonusDetails||[]).map(x=>x.name),
+            ...(autoBonus?["C’est pas finiii"]:[])
+          ];
+          detailHtml=`<span class="history-score-data"
+            data-player="${playerPts>=0?"+":""}${playerPts} pts"
+            data-prono="${pronoPts>=0?"+":""}${pronoPts} pts"
+            data-bonus="${bonusPts?((bonusPts>=0?"+":"")+bonusPts+" pts"):"—"}"
+            data-bonus-name="${escapeAttr(bonusNames.join(" + ")||"—")}"
+            data-malus="${malusPts?((malusPts>=0?"+":"")+malusPts+" pts"):"—"}"
+            hidden></span>`;
+        }catch(_){}
+      }
+
+      const finalScore=(match.resultCsp!==null && match.resultOpponent!==null)
+        ? (teams.venue==="away"
+            ? `${match.resultOpponent} - ${match.resultCsp}`
+            : `${match.resultCsp} - ${match.resultOpponent}`)
+        : "—";
+      const opponent=teams.opponent||"Adversaire";
+      return `<article class="history-game-card ${has?"":"history-empty"}">
+        <header class="history-game-head">
+          <div class="history-game-meta">
+            <span class="history-game-date">${formatHistoryMatchDate(match)}</span>
+            <strong>${escapeHTML(match.name)}</strong>
+          </div>
+          <div class="history-final">
+            <span>FINAL</span>
+            <b>${finalScore}</b>
+          </div>
+        </header>
+        ${has?`
+          <div class="history-table-row">
+            <div class="history-cell history-match-cell">
+              <b>${escapeHTML(match.name||"Match")}</b>
+              <small>${formatHistoryMatchDate(match)}</small>
+              <small class="history-real-score">Score : ${formatHistoryFinalScore(match)}</small>
+            </div>
+            <div class="history-cell"><b>${escapeHTML(starter||"—")}</b></div>
+            <div class="history-cell"><b>${escapeHTML(joker||"—")}</b></div>
+            <div class="history-cell"><b>${score}</b></div>
+            <div class="history-cell"><b>${cocu?"Cocu":video?"Vidéo JM":"—"}</b></div>
+            <div class="history-cell history-points"><b data-history-player-points>—</b></div>
+            <div class="history-cell history-points"><b data-history-prono-points>—</b></div>
+            <div class="history-cell history-points history-bonus-detail">
+              <b data-history-bonus-name>${cocu?"Cocu":video?"Vidéo JM":"—"}</b>
+              <small data-history-bonus-points>—</small>
+            </div>
+            <div class="history-cell history-points history-malus-detail">
+              <b data-history-malus-label>—</b>
+              <small data-history-malus-points>—</small>
+            </div>
+            <div class="history-cell history-total-cell">${pointsHtml||"<b>—</b>"}</div>
+          </div>
+          ${detailHtml}
+        `:`<div class="history-table-row">
+          <div class="history-cell history-match-cell">
+            <b>${escapeHTML(match.name||"Match")}</b>
+            <small>${formatHistoryMatchDate(match)}</small>
+          </div>
+          <div class="history-cell">—</div><div class="history-cell">—</div>
+          <div class="history-cell">—</div><div class="history-cell">—</div>
+          <div class="history-cell history-points">—</div>
+          <div class="history-cell history-points">—</div>
+          <div class="history-cell history-points">—</div>
+          <div class="history-cell history-points"><b>Non joué</b><small>-10 pts</small></div>
+          <div class="history-cell history-total-cell"><b>-10</b></div>
+        </div>`}
+      </article>`;
+    }).join("");
+
+    // En-tête unique du tableau, puis une ligne = un match.
+    if(el.querySelector(".history-game-card")){
+      const header=document.createElement("div");
+      header.className="history-table-header";
+      header.innerHTML=`
+        <div>Match</div>
+        <div>Joueur terrain</div>
+        <div>Joueur banc</div>
+        <div>Prono réalisé</div>
+        <div>Bonus utilisé</div>
+        <div>Résultat joueur</div>
+        <div>Résultat match</div>
+        <div>Bonus</div>
+        <div>Malus</div>
+        <div>Total points</div>`;
+      el.prepend(header);
+    }
+
+    // Injecte les composantes calculées dans chaque ligne.
+    el.querySelectorAll(".history-game-card").forEach(card=>{
+      const data=card.querySelector(".history-score-data");
+      if(!data) return;
+      const pp=card.querySelector("[data-history-player-points]");
+      const pr=card.querySelector("[data-history-prono-points]");
+      const bo=card.querySelector("[data-history-bonus-points]");
+      const ma=card.querySelector("[data-history-malus-points]");
+      const ml=card.querySelector("[data-history-malus-label]");
+      const bn=card.querySelector("[data-history-bonus-name]");
+      if(pp) pp.textContent=data.dataset.player||"—";
+      if(pr) pr.textContent=data.dataset.prono||"—";
+      if(bo) bo.textContent=data.dataset.bonus||"—";
+      if(bn) bn.textContent=data.dataset.bonusName||"—";
+      if(ma) ma.textContent=data.dataset.malus||"—";
+      if(ml) ml.textContent=(data.dataset.malus && data.dataset.malus!=="—") ? "Non joué" : "—";
+    });
+
+  }catch(error){
+    console.error("Historique utilisateur",error);
+    // Fallback sur l'historique déjà chargé avec loadSecureGameData.
+    const fallback=state.secureUserHistory||[];
+    if(fallback.length){
+      el.innerHTML=[...fallback].sort((a,b)=>new Date(b.match.start)-new Date(a.match.start)).map(row=>{
+        const match=row.match,pick=row.pick,prono=row.prono;
+        const teams=getMatchTeams(match);
+        const score=!prono?"—":(teams.venue==="away"
+          ? `${prono.opponent}-${prono.csp}`
+          : `${prono.csp}-${prono.opponent}`);
+        const has=!!pick||!!prono;
+        return `<div class="user-history-row ${has?"":"history-empty"}">
+          <strong>${escapeHTML(match.name)}</strong>
+          <div class="small">${formatDateTime(new Date(match.start))}</div>
+          ${has?`<div class="history-facts">
+            <span>🏀 <b>${escapeHTML(pick?.starter||"—")}</b></span>
+            ${pick?.joker?`<span>🪑 ${escapeHTML(pick.joker)}</span>`:""}
+            <span>🎯 ${score}</span>
+          </div>`:`<div class="small">Aucune participation enregistrée sur ce match.</div>`}
+        </div>`;
+      }).join("");
+    }else{
+      el.innerHTML=`<div class="info small">Historique indisponible : ${escapeHTML(error.message||"Erreur de chargement")}</div>`;
+    }
+  }
+}
+function renderAdminRoster(){
+  const el=document.getElementById("adminRoster");
+  if(!el) return;
+
+  const rows=[...(state.securePlayers||[])].sort((a,b)=>
+    Number(a.display_order||0)-Number(b.display_order||0) ||
+    a.name.localeCompare(b.name,"fr")
+  );
+
+  el.innerHTML=rows.map(p=>`
+    <div class="admin-roster-row">
+      ${p.image_url?`<img src="${escapeAttr(p.image_url)}" alt="">`:`<div style="width:42px"></div>`}
+      <div class="grow">
+        <strong>${escapeHTML(p.name)}</strong>
+        <div class="small">${p.active===false?"Inactif — historique conservé":"Actif"} · ordre ${Number(p.display_order||0)}</div>
+      </div>
+      <button class="btn-secondary" onclick="editPlayer('${escapeAttr(p.id)}')">Modifier</button>
+      <button class="btn-secondary" onclick="adminTogglePlayer('${escapeAttr(p.id)}',${p.active!==false})">
+        ${p.active===false?"Réactiver":"Désactiver"}
+      </button>
+    </div>
+  `).join("");
+}
+
+
+async function uploadPlayerPhoto(file){
+  if(!file) return null;
+  if(file.size>3*1024*1024) throw new Error("La photo dépasse 3 Mo.");
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+    throw new Error("Format accepté : JPG, PNG ou WebP.");
+  }
+
+  const ext=(file.name.split(".").pop()||"jpg").toLowerCase();
+  const safeName=`${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const path=`players/${safeName}`;
+
+  const {error}=await db.storage.from("player-photos").upload(path,file,{
+    cacheControl:"3600",
+    upsert:false,
+    contentType:file.type
+  });
+  if(error) throw error;
+
+  const {data}=db.storage.from("player-photos").getPublicUrl(path);
+  return data.publicUrl;
+}
+
+
+function editPlayer(id){
+  const p=(state.securePlayers||[]).find(x=>String(x.id)===String(id));
+  if(!p){showToast("Joueur introuvable","","error");return;}
+  const tab=[...document.querySelectorAll(".admin-subtab")].find(b=>b.dataset.section==="players");
+  if(tab) showAdminSection("players",tab);
+  const manager=document.querySelector(".admin-player-manager");
+  const managerCard=manager?.closest(".card");
+  if(managerCard){
+    managerCard.dataset.adminSection="players";
+    managerCard.classList.remove("hidden");
+  }
+  editingPlayerId=p.id;
+  document.getElementById("newPlayerName").value=p.name||"";
+  document.getElementById("newPlayerOrder").value=Number(p.display_order||0);
+  document.getElementById("newPlayerPhoto").value="";
+  const preview=document.getElementById("newPlayerPhotoPreview");
+  if(preview) preview.innerHTML=p.image_url
+    ? `<span class="edit-player-preview"><img src="${escapeAttr(p.image_url)}" alt="">Photo actuelle conservée si aucun nouveau fichier n'est choisi.</span>`
+    : "JPG, PNG ou WebP · 3 Mo maximum";
+  document.getElementById("savePlayerButton").textContent="Enregistrer les modifications";
+  document.getElementById("cancelPlayerEditButton").classList.remove("hidden");
+  document.querySelector(".admin-player-manager")?.scrollIntoView({behavior:"smooth",block:"center"});
+  document.getElementById("newPlayerName").focus();
+}
+function cancelPlayerEdit(){
+  editingPlayerId=null;
+  document.getElementById("newPlayerName").value="";
+  document.getElementById("newPlayerPhoto").value="";
+  document.getElementById("newPlayerOrder").value="0";
+  const preview=document.getElementById("newPlayerPhotoPreview");
+  if(preview) preview.textContent="JPG, PNG ou WebP · 3 Mo maximum";
+  document.getElementById("savePlayerButton").textContent="Ajouter le joueur";
+  document.getElementById("cancelPlayerEditButton").classList.add("hidden");
+}
+async function adminSavePlayer(){
+  if(!authProfile?.is_admin) return;
+  const name=(document.getElementById("newPlayerName")?.value||"").trim();
+  const file=document.getElementById("newPlayerPhoto")?.files?.[0]||null;
+  const displayOrder=Number(document.getElementById("newPlayerOrder")?.value||0);
+  if(!name){alert("Renseignez le nom du joueur.");return;}
+  try{
+    const payload={name,display_order:displayOrder,updated_at:new Date().toISOString()};
+    if(file) payload.image_url=await uploadPlayerPhoto(file);
+    let error;
+    if(editingPlayerId){
+      const updateResult=await db.from("players").update(payload).eq("id",editingPlayerId).select("id,name").single();
+      error=updateResult.error;
+      if(!error && !updateResult.data) throw new Error("Le joueur n'a pas été modifié.");
+    }else{
+      payload.active=true;
+      ({error}=await db.from("players").insert(payload));
+    }
+    if(error) throw error;
+    const label=editingPlayerId?"Joueur modifié":"Joueur ajouté";
+    cancelPlayerEdit();
+    await loadSecureGameData();
+    renderAdminRoster();renderAdminPlayers();render();
+    showToast(label,name);
+  }catch(error){showToast("Enregistrement impossible",error.message||"Erreur Supabase","error");}
+}
+
+async function adminAddPlayer(){ return adminSavePlayer(); }
+
+
+
+
+
+async function adminTogglePlayer(id,currentlyActive){
+  if(!authProfile?.is_admin) return;
+
+  const {error}=await db.from("players")
+    .update({active:!currentlyActive,updated_at:new Date().toISOString()})
+    .eq("id",id);
+
+  if(error){
+    showToast("Modification impossible",error.message,"error");
+    return;
+  }
+
+  await loadSecureGameData();
+  renderAdminRoster();
+  renderAdminPlayers();
+  render();
+  showToast(currentlyActive?"Joueur désactivé":"Joueur réactivé");
+}
 
 function renderAdminPlayers(){
 
@@ -4834,230 +7154,93 @@ function renderAdminPlayers(){
    SAVE MATCH
 ================================================== */
 
-function saveMatch(){
 
-  const name =
-    document
-      .getElementById("matchName")
-      .value
-      .trim();
+function parseAdminMatchName(name,venue){
+  const parts=String(name||"").split(/\s+-\s+/);
+  if(parts.length<2) return String(name||"").trim();
+  const a=parts[0].trim(),b=parts.slice(1).join(" - ").trim();
+  if(/limoges/i.test(a)) return b;
+  if(/limoges/i.test(b)) return a;
+  return venue==="away"?a:b;
+}
+async function saveSecurePlayerScores(matchUuid,scores,notPlayed){
+  const rows=(state.securePlayers||[]).map(player=>({
+    match_id:matchUuid,player_id:player.id,
+    plus_minus:notPlayed[player.name]?null:(scores[player.name]??null),
+    did_play:!notPlayed[player.name],updated_at:new Date().toISOString()
+  }));
+  const {error}=await db.from("player_match_scores").upsert(rows,{onConflict:"match_id,player_id"});
+  if(error) throw error;
+}
+async function uploadTeamImage(file){
+  if(!file) return null;
+  if(file.size>3*1024*1024) throw new Error("L'image d'équipe dépasse 3 Mo.");
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)) throw new Error("Format accepté : JPG, PNG ou WebP.");
+  const ext=(file.name.split(".").pop()||"png").toLowerCase();
+  const path=`teams/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const {error}=await db.storage.from("team-logos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+  if(error) throw error;
+  return db.storage.from("team-logos").getPublicUrl(path).data.publicUrl;
+}
 
-  const venue =
-    document
-      .getElementById("matchVenue")
-      ?.value || "home";
+async function saveMatch(){
+  if(!authProfile?.is_admin){alert("Accès administrateur requis.");return;}
 
-  const openFrom =
-    document
-      .getElementById("matchOpenFrom")
-      .value;
+  const name=document.getElementById("matchName").value.trim();
+  const venue=document.getElementById("matchVenue")?.value||"home";
+  const openFrom=document.getElementById("matchOpenFrom").value;
+  const start=document.getElementById("matchStart").value;
+  const jeanMarcOpenAt=document.getElementById("jeanMarcOpenAt")?.value||"";
+  if(!name||!openFrom||!start){alert("Renseignez le nom, l'ouverture et l'heure du match.");return;}
+  if(new Date(openFrom)>=new Date(start)){alert("L'ouverture des choix doit être antérieure au début du match.");return;}
 
-  const start =
-    document
-      .getElementById("matchStart")
-      .value;
-
-  const jeanMarcOpenAt =
-    document
-      .getElementById("jeanMarcOpenAt")
-      ?.value || "";
-
-  if(!name || !openFrom || !start){
-
-    alert(
-      "Renseigne le nom, l’ouverture et l’heure du match."
-    );
-
-    return;
-
-  }
-
-  if(new Date(openFrom) >= new Date(start)){
-
-    alert(
-      "L'ouverture des choix doit être antérieure au début du match."
-    );
-
-    return;
-
-  }
-
-  const scores = {};
-  const notPlayed = {};
-
-  PLAYERS.forEach(playerData => {
-
-    const player =
-      playerData.name;
-
-    const scoreInput =
-      document.getElementById(
-        "admin-score-" +
-        slugify(player)
-      );
-
-    const npInput =
-      document.getElementById(
-        "admin-np-" +
-        slugify(player)
-      );
-
-    scores[player] =
-      scoreInput.value === ""
-        ? 0
-        : Number(scoreInput.value);
-
-    notPlayed[player] =
-      npInput.checked;
-
+  const scores={},notPlayed={};
+  PLAYERS.forEach(pd=>{
+    const score=document.getElementById("admin-score-"+slugify(pd.name));
+    const np=document.getElementById("admin-np-"+slugify(pd.name));
+    scores[pd.name]=score?.value===""?null:Number(score?.value);
+    notPlayed[pd.name]=!!np?.checked;
   });
-
-  const resultCsp =
-    document
-      .getElementById("resultCsp")
-      .value;
-
-  const resultOpponent =
-    document
-      .getElementById("resultOpponent")
-      .value;
-
-  if(editingMatchId !== null){
-
-    const index =
-      state.matches.findIndex(
-        match => match.id === editingMatchId
-      );
-
-    if(index === -1){
-
-      alert("Match introuvable.");
-
-      cancelEditMatch();
-
-      return;
-
-    }
-
-    const previous =
-      state.matches[index];
-
-    state.matches[index] = {
-
-      ...previous,
-
-      name:name,
-
-      venue:venue,
-
-      jeanMarcOpenAt:
-        jeanMarcOpenAt
-          ? new Date(jeanMarcOpenAt).toISOString()
-          : new Date(new Date(start).getTime() + 2*60*60*1000).toISOString(),
-
-      openFrom:
-        new Date(openFrom).toISOString(),
-
-      start:
-        new Date(start).toISOString(),
-
-      scores:scores,
-
-      notPlayed:notPlayed,
-
-      resultCsp:
-        resultCsp === ""
-          ? null
-          : Number(resultCsp),
-
-      resultOpponent:
-        resultOpponent === ""
-          ? null
-          : Number(resultOpponent)
-
-    };
-
-    write(
-      KEYS.matches,
-      state.matches
-    );
-
-    cancelEditMatch(false);
-
-    renderAdminMatches();
-
-    render();
-
-    alert(
-      "Match mis à jour."
-    );
-
-    return;
-
-  }
-
-  const match = {
-
-    id:
-      Date.now(),
-
-    name:name,
-
-    venue:venue,
-
-    jeanMarcOpenAt:
-      jeanMarcOpenAt
-        ? new Date(jeanMarcOpenAt).toISOString()
-        : new Date(new Date(start).getTime() + 2*60*60*1000).toISOString(),
-
-    openFrom:
-      new Date(openFrom).toISOString(),
-
-    start:
-      new Date(start).toISOString(),
-
-    scores:scores,
-
-    notPlayed:notPlayed,
-
-    resultCsp:
-      resultCsp === ""
-        ? null
-        : Number(resultCsp),
-
-    resultOpponent:
-      resultOpponent === ""
-        ? null
-        : Number(resultOpponent)
-
+  const rc=document.getElementById("resultCsp").value,ro=document.getElementById("resultOpponent").value;
+  const cspFile=document.getElementById("matchCspImage")?.files?.[0]||null;
+  const opponentFile=document.getElementById("matchOpponentImage")?.files?.[0]||null;
+  const editingCurrent=editingMatchId!==null?state.matches.find(m=>String(m.id)===String(editingMatchId)):null;
+  let cspImageUrl=editingCurrent?.cspImageUrl||null;
+  let opponentImageUrl=editingCurrent?.opponentImageUrl||null;
+  if(cspFile)cspImageUrl=await uploadTeamImage(cspFile);
+  if(opponentFile)opponentImageUrl=await uploadTeamImage(opponentFile);
+  const payload={
+    legacy_name:name,opponent:parseAdminMatchName(name,venue),venue,
+    choices_open_at:new Date(openFrom).toISOString(),start_at:new Date(start).toISOString(),
+    video_jean_marc_open_at:jeanMarcOpenAt?new Date(jeanMarcOpenAt).toISOString():new Date(new Date(start).getTime()+7200000).toISOString(),
+    csp_score:rc===""?null:Number(rc),opponent_score:ro===""?null:Number(ro),
+    csp_image_url:cspImageUrl,opponent_image_url:opponentImageUrl,updated_at:new Date().toISOString()
   };
 
-  state.matches.push(match);
-
-  write(
-    KEYS.matches,
-    state.matches
-  );
-
-  resetAdminMatchForm();
-
-  renderAdminMatches();
-
-  render();
-
-  const justCreatedMatch =
-    state.matches[
-      state.matches.length - 1
-    ];
-
-  showToast(
-    "✅ Match enregistré",
-    matchChoicesOpen(justCreatedMatch)
-      ? "Les sélections sont ouvertes."
-      : "Vérifie la fenêtre d'ouverture des sélections."
-  );
-
+  try{
+    let uuid;
+    if(editingMatchId!==null){
+      const current=state.matches.find(m=>String(m.id)===String(editingMatchId));
+      if(!current?.secureId) throw new Error("Match sécurisé introuvable.");
+      const {data,error}=await db.from("matches").update(payload).eq("id",current.secureId).select("id").single();
+      if(error) throw error; uuid=data.id;
+    }else{
+      payload.legacy_id=Date.now();
+      const {data,error}=await db.from("matches").insert(payload).select("id").single();
+      if(error) throw error; uuid=data.id;
+    }
+    await saveSecurePlayerScores(uuid,scores,notPlayed);
+    const wasEdit=editingMatchId!==null;
+    await loadSecureGameData(); await loadSecureExtras();
+    if(wasEdit) cancelEditMatch(false); else resetAdminMatchForm();
+    renderAdminMatches(); render();
+    showToast(wasEdit?"Match mis à jour":"✅ Match enregistré","Sauvegarde sécurisée Supabase OK.");
+  }catch(error){
+    console.error(error);showToast("Enregistrement impossible",error.message||"Erreur Supabase","error");
+  }
 }
+
+
 
 
 
@@ -5123,9 +7306,11 @@ function editMatch(id){
       match.name || "";
 
   const venueSelect = document.getElementById("matchVenue");
-  if(venueSelect){
-    venueSelect.value = match.venue || "home";
-  }
+  if(venueSelect){ venueSelect.value = match.venue || "home"; }
+  document.getElementById("matchCspImage").value="";
+  document.getElementById("matchOpponentImage").value="";
+  document.getElementById("matchCspImageInfo").textContent=match.cspImageUrl?"Image actuelle conservée si aucun nouveau fichier n'est choisi.":"JPG, PNG ou WebP · 3 Mo maximum";
+  document.getElementById("matchOpponentImageInfo").textContent=match.opponentImageUrl?"Image actuelle conservée si aucun nouveau fichier n'est choisi.":"JPG, PNG ou WebP · 3 Mo maximum";
 
   document
     .getElementById("matchOpenFrom")
@@ -5205,6 +7390,8 @@ function resetAdminMatchForm(){
 
   const venueSelect = document.getElementById("matchVenue");
   if(venueSelect) venueSelect.value = "home";
+  ["matchCspImage","matchOpponentImage"].forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
+  ["matchCspImageInfo","matchOpponentImageInfo"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent="JPG, PNG ou WebP · 3 Mo maximum";});
 
   document
     .getElementById("matchOpenFrom")
@@ -5262,6 +7449,61 @@ function cancelEditMatch(resetForm = true){
 /* ==================================================
    ADMIN MATCHES
 ================================================== */
+
+async function loadAdminGameStats(){
+  const el=document.getElementById("adminGameStats");
+  if(!el||!authProfile?.is_admin)return;
+  el.innerHTML='<div class="small">Chargement des statistiques…</div>';
+  try{
+    const [a,b,c,d]=await Promise.all([
+      db.from("profiles").select("id,pseudo,created_at"),
+      db.from("picks").select("user_id,match_id,starter_player_id,joker_player_id"),
+      db.from("pronos").select("user_id,match_id,predicted_csp_score,predicted_opponent_score"),
+      db.from("bonuses").select("user_id,match_id,bonus_type,season")
+    ]);
+    const err=[a.error,b.error,c.error,d.error].find(Boolean);if(err)throw err;
+    const profiles=a.data||[],picks=b.data||[],pronos=c.data||[],bonuses=d.data||[];
+    const pById=Object.fromEntries((state.securePlayers||[]).map(p=>[String(p.id),p]));
+    const finished=(state.matches||[]).filter(m=>m.resultCsp!==null&&m.resultOpponent!==null).sort((x,y)=>new Date(y.start)-new Date(x.start));
+    if(!finished.length){el.innerHTML='<div class="small">Aucune journée terminée.</div>';return;}
+    function rowFor(profile,m){
+      const pick=picks.find(x=>String(x.user_id)===String(profile.id)&&String(x.match_id)===String(m.secureId));
+      const pr=pronos.find(x=>String(x.user_id)===String(profile.id)&&String(x.match_id)===String(m.secureId));
+      const br=bonuses.filter(x=>String(x.user_id)===String(profile.id)&&String(x.match_id)===String(m.secureId));
+      const starter=pick?pById[String(pick.starter_player_id)]?.name:null;
+      const joker=pick?.joker_player_id?pById[String(pick.joker_player_id)]?.name:null;
+      const noPart=!pick&&!pr;
+      const vals=Object.entries(m.scores||{}).filter(([n])=>!m.notPlayed?.[n]).map(([,v])=>Number(v)).filter(Number.isFinite);
+      const worst=vals.length?Math.min(...vals):0,best=vals.length?Math.max(...vals):null;
+      let effective=starter;if(starter&&m.notPlayed?.[starter])effective=joker||null;
+      let fantasy=effective?Number(m.scores?.[effective]??0):0;
+      const cocu=br.some(x=>x.bonus_type==="cocu"),video=br.some(x=>x.bonus_type==="video_jean_marc");
+      const baseFantasy=noPart?worst:fantasy;
+      let configuredBonus=0;
+      if(!noPart){
+        for(const row of br){
+          if(["cocu","video_jean_marc"].includes(row.bonus_type))continue;
+          const def=getBonusDefinition(row.bonus_type);
+          if(def) configuredBonus+=getBonusEffectDelta(def,baseFantasy);
+        }
+      }
+      if(cocu)fantasy*=2;if(video)fantasy=0;if(noPart)fantasy=worst;
+      fantasy+=configuredBonus;
+      const prono=pr?{csp:Number(pr.predicted_csp_score),opponent:Number(pr.predicted_opponent_score)}:null;
+      const pp=noPart?0:getPronoPoints(prono,m);
+      const cpf=(!noPart&&effective&&best!==null&&Number(m.scores?.[effective])===best)?5:0;
+      const penalty=noPart?-10:0;
+      return {pseudo:profile.pseudo||"Utilisateur",effective,starter,fantasy,pp,cpf,penalty,cocu,video,total:fantasy+pp+cpf+penalty};
+    }
+    el.innerHTML=finished.map((m,i)=>{
+      const rows=profiles.filter(p=>!p.created_at || new Date(m.start)>=new Date(p.created_at)).map(p=>rowFor(p,m)).sort((x,y)=>y.total-x.total||x.pseudo.localeCompare(y.pseudo,"fr"));
+      const avg=rows.length?Math.round(rows.reduce((s,r)=>s+r.total,0)/rows.length):0;
+      return `<div class="admin-day-card"><div class="admin-day-header"><div><span class="day-kicker">JOURNÉE ${finished.length-i}</span><h4>${escapeHTML(m.name)}</h4><div class="small">${formatDateTime(m.start)}</div></div><div class="admin-day-score"><span>${m.resultCsp}</span><small>FINAL</small><span>${m.resultOpponent}</span></div></div>
+      <div class="admin-stat-strip"><div><strong>${rows.length}</strong><span>participants</span></div><div><strong>${rows[0]?.total>=0?"+":""}${rows[0]?.total??0}</strong><span>meilleur score</span></div><div><strong>${avg>=0?"+":""}${avg}</strong><span>moyenne</span></div></div>
+      <div class="admin-boxscore">${rows.map((r,k)=>`<div class="boxscore-row"><span class="box-rank">${k+1}</span><div class="box-user"><strong>${escapeHTML(r.pseudo)}</strong><span>${escapeHTML(r.effective||r.starter||"Non participé")}</span></div><div class="box-detail"><span>Joueur <b>${r.fantasy>=0?"+":""}${r.fantasy}</b></span><span>Prono <b>+${r.pp}</b></span>${r.cpf?`<span>Fin iii <b>+${r.cpf}</b></span>`:""}${r.penalty?`<span>Pénalité <b>${r.penalty}</b></span>`:""}${r.cocu?'<span class="stat-badge">Cocu</span>':""}${r.video?'<span class="stat-badge">Vidéo JM</span>':""}</div><strong class="box-total">${r.total>=0?"+":""}${r.total}</strong></div>`).join("")}</div></div>`;
+    }).join("");
+  }catch(error){console.error(error);el.innerHTML=`<div class="info small">Impossible de charger les statistiques : ${escapeHTML(error.message||"Erreur Supabase")}</div>`;}
+}
 
 function renderAdminMatches(){
 
@@ -5392,37 +7634,18 @@ function renderAdminMatches(){
    DELETE MATCH
 ================================================== */
 
-function deleteMatch(id){
-
-  if(
-    !confirm(
-      "Supprimer définitivement ce match ?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  state.matches =
-    state.matches.filter(
-      match =>
-        match.id !== id
-    );
-
-
-  write(
-    KEYS.matches,
-    state.matches
-  );
-
-
-  renderAdminMatches();
-
-  render();
-
+async function deleteMatch(id){
+  if(!authProfile?.is_admin)return;
+  if(!confirm("Supprimer définitivement ce match ?"))return;
+  const match=state.matches.find(m=>String(m.id)===String(id));
+  if(!match?.secureId){alert("Match sécurisé introuvable.");return;}
+  const {error}=await db.from("matches").delete().eq("id",match.secureId);
+  if(error){showToast("Suppression impossible",error.message,"error");return;}
+  await loadSecureGameData();await loadSecureExtras();
+  renderAdminMatches();render();showToast("Match supprimé");
 }
+
+
 
 
 /* ==================================================
@@ -5441,18 +7664,30 @@ function logoutAdmin(){
     .getElementById("adminLogin")
     .classList.remove("hidden");
 
-  document
-    .getElementById("adminPassword")
-    .value = "";
-
 }
+
+
 
 
 /* ==================================================
    TABS
 ================================================== */
 
+function showFantasySection(section,button){
+  const tab=document.getElementById("tab-fantasy"); if(!tab)return;
+  tab.querySelectorAll(".fantasy-section").forEach(card=>{
+    card.classList.toggle("hidden",card.dataset.fantasySection!==section);
+  });
+  tab.querySelectorAll(".fantasy-subtab").forEach(b=>b.classList.remove("active"));
+  button?.classList.add("active");
+}
+
 function showTab(name,button){
+
+  if(name==="admin" && !authProfile?.is_admin){
+    showToast("Accès refusé","Ce compte n'est pas administrateur.","error");
+    return;
+  }
 
   document
     .querySelectorAll(
@@ -6030,32 +8265,24 @@ function getLatestStartedMatch(){
 }
 
 function getLatestJeanMarcEligibleMatch(){
-  const now = new Date();
+  const now=new Date();
 
-  const latestStartedMatch =
-    [...(state.matches || [])]
-      .filter(match =>
-        match &&
-        match.start &&
-        new Date(match.start) <= now
-      )
-      .sort((a,b) =>
-        new Date(b.start) - new Date(a.start)
-      )[0] || null;
+  const latestStartedMatch=[...(state.matches||[])]
+    .filter(match=>match && match.start && new Date(match.start)<=now)
+    .sort((a,b)=>new Date(b.start)-new Date(a.start))[0] || null;
 
-  if(!latestStartedMatch){
-    return null;
-  }
+  if(!latestStartedMatch) return null;
 
-  const openAt =
-    getJeanMarcOpenDate(latestStartedMatch);
+  const openAt=getJeanMarcOpenDate(latestStartedMatch);
 
-  if(!openAt || now < openAt){
-    return null;
-  }
+  // Verrou absolu côté IHM jusqu'à l'heure de fin / ouverture
+  // programmée dans l'admin pour CE match.
+  if(!openAt || now<openAt) return null;
 
   return latestStartedMatch;
 }
+
+
 
 
 
@@ -6085,6 +8312,20 @@ function getWorstPlayerScore(match){
   return values.length ? Math.min(...values) : 0;
 }
 
+function getUserAccountCreatedAt(user){
+  if(user===state.user && authProfile?.created_at) return authProfile.created_at;
+  return state.profileCreatedAtByPseudo?.[user] || null;
+}
+
+function isUserEligibleForMatch(user,match){
+  if(!match?.start) return true;
+  const createdAt=getUserAccountCreatedAt(user);
+  if(!createdAt) return true; // comptes historiques/migrés sans date exploitable
+  const created=new Date(createdAt), start=new Date(match.start);
+  if(Number.isNaN(created.getTime())||Number.isNaN(start.getTime())) return true;
+  return start>=created;
+}
+
 function isNoParticipation(user, match){
   if(!match || match.resultCsp === null || match.resultOpponent === null) return false;
   const pick = getPickForMatch(user, match);
@@ -6105,9 +8346,11 @@ function getRankMovement(user){
   const prevIndex = matches.length - 2;
   const currIndex = matches.length - 1;
   const previous = users
+    .filter(u=>isUserEligibleForMatch(u,matches[prevIndex]))
     .map(u => ({user:u,total:getGeneralTotalThrough(u,prevIndex)}))
     .sort((a,b) => b.total-a.total || a.user.localeCompare(b.user,"fr"));
   const current = users
+    .filter(u=>isUserEligibleForMatch(u,matches[currIndex]))
     .map(u => ({user:u,total:getGeneralTotalThrough(u,currIndex)}))
     .sort((a,b) => b.total-a.total || a.user.localeCompare(b.user,"fr"));
   const oldRank = previous.findIndex(x => x.user === user) + 1;
@@ -6141,7 +8384,7 @@ async function saveWinnerMessage(matchId){
   const match = state.matches.find(m => String(m.id) === String(matchId));
   if(!match || !state.user) return;
   const users = Object.keys(state.users || {});
-  const ranking = users.map(u => getMatchRankingEntry(u, match))
+  const ranking = users.filter(u=>isUserEligibleForMatch(u,match)).map(u => getMatchRankingEntry(u, match))
     .sort((a,b) => b.total-a.total || a.user.localeCompare(b.user,"fr"));
   if(!ranking.length || ranking[0].user !== state.user){
     alert("Seul le vainqueur de la journée peut écrire ce message.");
@@ -6156,30 +8399,83 @@ async function saveWinnerMessage(matchId){
 }
 
 async function restoreUserBonus(){
-  if(!state.admin) return;
-  const user = document.getElementById("restoreBonusUser")?.value;
-  const type = document.getElementById("restoreBonusType")?.value;
-  if(!user){ alert("Sélectionne un utilisateur."); return; }
-  const bonus = state.bonuses[user] || {};
-  if(type === "cocu"){
-    bonus.cocu = false;
-    bonus.cocuMatchId = null;
-  } else {
-    if(bonus.videoJeanMarcByMatch && bonus.videoJeanMarcMatchId){
-      delete bonus.videoJeanMarcByMatch[bonus.videoJeanMarcMatchId];
-    }
-    bonus.videoJeanMarcUsed = false;
-    bonus.videoJeanMarcMatchId = null;
+
+  if(!authProfile?.is_admin){
+    alert("Accès administrateur requis.");
+    return;
   }
-  state.bonuses[user] = bonus;
-  const result = await writeUserBranch(
-    KEYS.bonuses,
-    user,
-    state.bonuses[user]
+
+  const pseudo=document.getElementById("restoreBonusUser")?.value;
+  const uiType=document.getElementById("restoreBonusType")?.value;
+
+  if(!pseudo || !uiType){
+    alert("Sélectionnez un utilisateur et un bonus.");
+    return;
+  }
+
+  const dbType=uiType==="jeanMarc" ? "video_jean_marc" : "cocu";
+
+  // Cherche le profil Auth correspondant au pseudo.
+  const {data:profile,error:profileError}=await db
+    .from("profiles")
+    .select("id,pseudo")
+    .eq("pseudo",pseudo)
+    .maybeSingle();
+
+  if(profileError){
+    showToast("Rétablissement impossible",profileError.message,"error");
+    return;
+  }
+
+  // Tant que les autres joueurs ne sont pas migrés Auth, conserver l'ancien comportement.
+  if(!profile){
+    state.bonuses[pseudo]=state.bonuses[pseudo]||{};
+    if(uiType==="cocu"){
+      state.bonuses[pseudo].cocu=false;
+      delete state.bonuses[pseudo].cocuMatchId;
+    }else{
+      state.bonuses[pseudo].videoJeanMarcUsed=false;
+      state.bonuses[pseudo].videoJeanMarcByMatch={};
+      delete state.bonuses[pseudo].videoJeanMarcMatchId;
+    }
+
+    const result=await write(KEYS.bonuses,state.bonuses);
+    showToast(
+      result.ok ? "Bonus rétabli" : "Synchronisation impossible",
+      `${pseudo} peut de nouveau utiliser ce bonus.`
+    );
+    render();
+    return;
+  }
+
+  // Nouvelle architecture : "rétablir" = supprimer la consommation existante.
+  // Il ne faut surtout pas INSERT/UPSERT une seconde ligne, car l'unicité
+  // (user_id, season, bonus_type) garantit 1 utilisation maximum par saison.
+  const {error}=await db
+    .from("bonuses")
+    .delete()
+    .eq("user_id",profile.id)
+    .eq("season","2026-2027")
+    .eq("bonus_type",dbType);
+
+  if(error){
+    showToast("Rétablissement impossible",error.message,"error");
+    return;
+  }
+
+  if(String(profile.id)===String(authUser?.id)){
+    await loadSecureExtras();
+  }
+
+  showToast(
+    "Bonus rétabli",
+    `${pseudo} peut de nouveau utiliser ${uiType==="jeanMarc" ? "Vidéo Jean-Marc" : "Cocu"}.`
   );
-  showToast(result.ok ? "↩️ Bonus rétabli" : "⚠️ Synchronisation impossible", user);
-  renderBonuses();
+
+  render();
 }
+
+
 
 function renderRestoreBonusUsers(){
   const el = document.getElementById("restoreBonusUser");
@@ -6196,13 +8492,255 @@ function renderRestoreBonusUsers(){
    GLOBAL RENDER
 ================================================== */
 
+
+/* ==================================================
+   V1.0 DB TEST — TABLES SÉCURISÉES
+================================================== */
+async function loadSecureGameData(){
+  if(!authUser) return;
+
+  const [mr,plr,sr,pkr,prr]=await Promise.all([
+    db.from("matches").select("id,legacy_id,legacy_name,opponent,venue,start_at,choices_open_at,video_jean_marc_open_at,csp_score,opponent_score,is_cancelled,csp_image_url,opponent_image_url").order("start_at"),
+    db.from("players").select("id,name,image_url,active,display_order").order("display_order"),
+    db.from("player_match_scores").select("match_id,player_id,plus_minus,did_play"),
+    db.from("picks").select("match_id,starter_player_id,joker_player_id").eq("user_id",authUser.id),
+    db.from("pronos").select("match_id,predicted_csp_score,predicted_opponent_score").eq("user_id",authUser.id)
+  ]);
+
+  const err=[mr.error,plr.error,sr.error,pkr.error,prr.error].find(Boolean);
+  if(err) throw err;
+
+  state.securePlayers=plr.data||[];
+
+  const embeddedPhotoByName=Object.fromEntries(
+    (PLAYERS||[]).map(p=>[p.name,p.photo])
+  );
+
+  PLAYERS=(state.securePlayers||[])
+    .filter(p=>p.active!==false)
+    .map(p=>({
+      name:p.name,
+      photo:p.image_url || embeddedPhotoByName[p.name] || ""
+    }));
+
+  const playersById=Object.fromEntries(state.securePlayers.map(p=>[String(p.id),p]));
+  const scores={},notPlayed={};
+
+  for(const row of sr.data||[]){
+    const p=playersById[String(row.player_id)];
+    if(!p) continue;
+    const k=String(row.match_id);
+    scores[k]??={}; notPlayed[k]??={};
+    scores[k][p.name]=row.plus_minus===null?0:Number(row.plus_minus);
+    notPlayed[k][p.name]=row.did_play===false;
+  }
+
+  state.matches=(mr.data||[]).map(m=>({
+    id:m.legacy_id??m.id,
+    secureId:m.id,
+    name:m.legacy_name||(m.venue==="away"?`${m.opponent} - Limoges CSP`:`Limoges CSP - ${m.opponent}`),
+    venue:m.venue||"home",
+    start:m.start_at,
+    openFrom:m.choices_open_at,
+    jeanMarcOpenAt:m.video_jean_marc_open_at,
+    resultCsp:m.csp_score,
+    resultOpponent:m.opponent_score,
+    cspImageUrl:m.csp_image_url||null,
+    opponentImageUrl:m.opponent_image_url||null,
+    scores:scores[String(m.id)]||{},
+    notPlayed:notPlayed[String(m.id)]||{},
+    isCancelled:!!m.is_cancelled
+  }));
+
+  const matchesByUuid=Object.fromEntries(state.matches.map(m=>[String(m.secureId),m]));
+
+  const securePickByMatch=Object.fromEntries((pkr.data||[]).map(row=>[
+    String(row.match_id),
+    {
+      starter:playersById[String(row.starter_player_id)]?.name||null,
+      joker:playersById[String(row.joker_player_id)]?.name||null
+    }
+  ]));
+  const securePronoByMatch=Object.fromEntries((prr.data||[]).map(row=>[
+    String(row.match_id),
+    {
+      csp:row.predicted_csp_score,
+      opponent:row.predicted_opponent_score
+    }
+  ]));
+  state.secureUserHistory=state.matches.map(m=>({
+    match:m,
+    pick:securePickByMatch[String(m.secureId)]||null,
+    prono:securePronoByMatch[String(m.secureId)]||null
+  }));
+
+  state.picks[state.user]={};
+  for(const row of pkr.data||[]){
+    const m=matchesByUuid[String(row.match_id)];
+    if(!m) continue;
+    state.picks[state.user][String(m.id)]={
+      starter:playersById[String(row.starter_player_id)]?.name||null,
+      joker:row.joker_player_id?playersById[String(row.joker_player_id)]?.name||null:null
+    };
+  }
+
+  state.pronos[state.user]={};
+  for(const row of prr.data||[]){
+    const m=matchesByUuid[String(row.match_id)];
+    if(!m) continue;
+    state.pronos[state.user][String(m.id)]={
+      csp:Number(row.predicted_csp_score),
+      opponent:Number(row.predicted_opponent_score)
+    };
+  }
+}
+
+function secureMatchFromLegacyId(id){
+  return (state.matches||[]).find(m=>String(m.id)===String(id))||null;
+}
+function securePlayerByName(name){
+  return (state.securePlayers||[]).find(p=>p.name===name)||null;
+}
+
+async function saveSecurePick(matchId,pick){
+  const m=secureMatchFromLegacyId(matchId);
+  const starter=securePlayerByName(pick?.starter);
+  const joker=pick?.joker?securePlayerByName(pick.joker):null;
+  if(!authUser||!m?.secureId||!starter?.id)
+    return {ok:false,error:new Error("Match ou joueur introuvable dans la base sécurisée")};
+
+  const {error}=await db.from("picks").upsert({
+    user_id:authUser.id,
+    match_id:m.secureId,
+    starter_player_id:starter.id,
+    joker_player_id:joker?.id||null,
+    updated_at:new Date().toISOString()
+  },{onConflict:"user_id,match_id"});
+
+  return error?{ok:false,error}:{ok:true};
+}
+
+async function saveSecureProno(matchId,prono){
+  const m=secureMatchFromLegacyId(matchId);
+  if(!authUser||!m?.secureId)
+    return {ok:false,error:new Error("Match introuvable dans la base sécurisée")};
+
+  const {error}=await db.from("pronos").upsert({
+    user_id:authUser.id,
+    match_id:m.secureId,
+    predicted_csp_score:Number(prono.csp),
+    predicted_opponent_score:Number(prono.opponent),
+    updated_at:new Date().toISOString()
+  },{onConflict:"user_id,match_id"});
+
+  return error?{ok:false,error}:{ok:true};
+}
+
+
+
+/* ==================================================
+   V1.0 DB TEST 2 — BONUS + FEEDBACK SÉCURISÉS
+================================================== */
+async function loadSecureExtras(){
+  if(!authUser) return;
+
+  const [br,fr,profilesRes,bonusDefsRes]=await Promise.all([
+    db.from("bonuses").select("match_id,season,bonus_type,activated_at").eq("user_id",authUser.id),
+    db.from("feedback").select("id,user_id,rating,message,published,created_at").order("created_at",{ascending:false}),
+    db.from("profiles").select("id,pseudo,created_at"),
+    db.from("bonus_definitions").select("*").order("name")
+  ]);
+  if(br.error) throw br.error;
+  if(fr.error) throw fr.error;
+  if(profilesRes.error) throw profilesRes.error;
+  if(bonusDefsRes.error) throw bonusDefsRes.error;
+
+  state.secureBonuses=br.data||[];
+  state.bonusDefinitions=bonusDefsRes.data||[];
+  const pseudoById=Object.fromEntries((profilesRes.data||[]).map(p=>[String(p.id),p.pseudo]));
+  state.profileCreatedAtByPseudo=Object.fromEntries((profilesRes.data||[]).map(p=>[p.pseudo,p.created_at||null]));
+  state.secureFeedback=(fr.data||[]).map(item=>({
+    ...item,
+    pseudo:pseudoById[String(item.user_id)] || "Utilisateur"
+  }));
+
+  const mine=state.secureBonuses;
+  state.bonuses[state.user]=state.bonuses[state.user]||{};
+  state.bonuses[state.user].videoJeanMarcUsed=mine.some(x=>x.bonus_type==="video_jean_marc");
+  state.bonuses[state.user].cocu=mine.some(x=>x.bonus_type==="cocu");
+
+  const cocuRow=mine.find(x=>x.bonus_type==="cocu");
+  if(cocuRow){
+    const cm=(state.matches||[]).find(x=>String(x.secureId)===String(cocuRow.match_id));
+    if(cm) state.bonuses[state.user].cocuMatchId=cm.id;
+  }
+
+  const video=mine.find(x=>x.bonus_type==="video_jean_marc");
+  if(video){
+    const m=(state.matches||[]).find(x=>String(x.secureId)===String(video.match_id));
+    if(m){
+      state.bonuses[state.user].videoJeanMarcMatchId=m.id;
+      state.bonuses[state.user].videoJeanMarcByMatch={[String(m.id)]:true};
+    }
+  }
+}
+
+async function saveSecureBonus(matchId,bonusType){
+  const m=secureMatchFromLegacyId(matchId);
+  if(!authUser||!m?.secureId) return {ok:false,error:new Error("Match introuvable")};
+  const {error}=await db.from("bonuses").insert({
+    user_id:authUser.id,
+    match_id:m.secureId,
+    season:"2026-2027",
+    bonus_type:bonusType
+  });
+  return error?{ok:false,error}:{ok:true};
+}
+
+async function saveSecureFeedback(rating,message){
+  if(!authUser) return {ok:false,error:new Error("Utilisateur non connecté")};
+  const {error}=await db.from("feedback").insert({
+    user_id:authUser.id,
+    rating:Number(rating),
+    message:String(message),
+    published:false
+  });
+  return error?{ok:false,error}:{ok:true};
+}
+
+async function setSecureFeedbackPublished(id,published){
+  const {error}=await db.from("feedback").update({published:!!published}).eq("id",id);
+  return error?{ok:false,error}:{ok:true};
+}
+
+
 function render(){
+  document.body.classList.toggle("authenticated", !!state.user);
+  const adminTabButton=document.getElementById("adminTabButton");
+  if(adminTabButton){
+    adminTabButton.classList.toggle("hidden", !authProfile?.is_admin);
+  }
+
+  document.body.classList.toggle("authenticated",!!state.user);
+
+  const connectionTabButton=document.getElementById("connectionTabButton");
+  if(connectionTabButton){
+    connectionTabButton.innerHTML=state.user
+      ? `👤 ${escapeHTML(state.user)}`
+      : "👤 Connexion";
+  }
+
+
 
   document
     .getElementById("user")
     .innerHTML =
       state.user
-        ? `Connecté : <strong>${escapeHTML(state.user)}</strong>`
+        ? `Connecté : <strong>${escapeHTML(state.user)}</strong>${
+            authProfile?.is_admin
+              ? ` <span class="auto-bonus-badge">Admin</span>`
+              : ""
+          }`
         : "Non connecté";
 
   const logoutButton =
@@ -6227,6 +8765,7 @@ function render(){
   renderRanking();
 
   renderMatches();
+  renderUserHistory();
 
 
   if(state.admin){
@@ -6234,6 +8773,20 @@ function render(){
     renderAdmin();
     renderAdminUsers();
     renderHistoricalPickEditor();
+
+  }
+
+  const adminInfo =
+    document.getElementById("adminAccessInfo");
+
+  if(adminInfo){
+
+    adminInfo.innerHTML =
+      !state.user
+        ? "Connectez-vous avec votre compte administrateur pour accéder à cette rubrique."
+        : authProfile?.is_admin
+          ? `Compte administrateur reconnu : <strong>${escapeHTML(state.user)}</strong>.`
+          : `Compte connecté : <strong>${escapeHTML(state.user)}</strong>. Vous n'avez pas les droits administrateur.`;
 
   }
 
@@ -6330,124 +8883,129 @@ function escapeAttr(value){
 ================================================== */
 
 
-function saveFeedback(){
-
-  if(!state.user){
-    alert("Connecte-toi avant d'envoyer ton retour.");
-    return;
-  }
-
-  const rating = Number(
-    document.getElementById("feedbackRating").value
-  );
-
-  const text =
-    document.getElementById("feedbackText").value.trim();
-
-  if(!text){
-    alert("Écris au moins un commentaire.");
-    return;
-  }
-
-  if(!state.feedback[state.user]){
-    state.feedback[state.user] = [];
-  }
-
-  state.feedback[state.user].push({
-    rating,
-    text,
-    date:new Date().toISOString(),
-    published:false
-  });
-
-  writeUserBranch(
-    KEYS.feedback,
-    state.user,
-    state.feedback[state.user]
-  );
-
-  document.getElementById("feedbackText").value = "";
-
-  const status = document.getElementById("feedbackStatus");
-  if(status){
-    status.textContent = "✅ Merci, retour enregistré.";
-  }
-
-  renderFeedback();
+async function saveFeedback(){
+  if(!state.user||!authUser){alert("Connectez-vous avant d'envoyer votre retour.");return;}
+  const rating=Number(document.getElementById("feedbackRating").value);
+  const message=document.getElementById("feedbackText").value.trim();
+  if(!message){alert("Écrivez au moins un commentaire.");return;}
+  const result=await saveSecureFeedback(rating,message);
+  if(!result.ok){showToast("Enregistrement impossible",result.error?.message||"Erreur Supabase","error");return;}
+  document.getElementById("feedbackText").value="";
+  const status=document.getElementById("feedbackStatus");if(status)status.textContent="✅ Merci, retour enregistré.";
+  await loadSecureExtras();showToast("Retour expérience enregistré");renderFeedback();
 }
 
 
 
-async function toggleFeedbackPublic(pseudo, itemIndex){
 
-  if(!state.admin) return;
 
-  const items = state.feedback[pseudo];
-  if(!items || !items[itemIndex]) return;
+async function toggleFeedbackPublic(source,idOrPseudo,itemIndex){
+  if(!authProfile?.is_admin){
+    showToast("Accès refusé","Action réservée à l'administrateur.","error");
+    return;
+  }
 
-  items[itemIndex].published = !items[itemIndex].published;
+  if(source==="secure"){
+    const item=(state.secureFeedback||[]).find(x=>String(x.id)===String(idOrPseudo));
+    if(!item) return;
 
-  const result = await write(KEYS.feedback, state.feedback);
+    const nextPublished=!item.published;
+    const result=await setSecureFeedbackPublished(item.id,nextPublished);
 
+    if(!result.ok){
+      showToast("Modification impossible",result.error?.message||"Erreur Supabase","error");
+      return;
+    }
+
+    item.published=nextPublished;
+    await loadSecureExtras();
+    renderFeedback();
+    showToast(
+      nextPublished?"Retour rendu public":"Retour masqué",
+      nextPublished?"Il est maintenant visible par les utilisateurs.":"Il n'est plus public."
+    );
+    return;
+  }
+
+  const items=state.feedback[idOrPseudo];
+  if(!items||!items[itemIndex]) return;
+  items[itemIndex].published=!items[itemIndex].published;
+  const result=await write(KEYS.feedback,state.feedback);
+  renderFeedback();
   showToast(
-    result.ok ? "Retour expérience mis à jour" : "Synchronisation impossible",
-    items[itemIndex].published ? "Le retour est maintenant public." : "Le retour est maintenant masqué."
+    result.ok?"Retour expérience mis à jour":"Synchronisation impossible",
+    items[itemIndex].published?"Le retour est maintenant public.":"Le retour est maintenant masqué."
   );
-
-  renderFeedback();
 }
+
+
+
+
 
 function renderFeedback(){
 
-  const el = document.getElementById("feedbackList");
+  const el=document.getElementById("feedbackList");
   if(!el) return;
 
-  const rows = [];
+  const rows=[];
 
-  Object.entries(state.feedback || {}).forEach(([pseudo,items])=>{
-    (items || []).forEach((item,itemIndex)=>{
-      if(state.admin || item.published){
+  // Anciens retours : conservés pendant la migration.
+  Object.entries(state.feedback||{}).forEach(([pseudo,items])=>{
+    (items||[]).forEach((item,itemIndex)=>{
+      if(authProfile?.is_admin||item.published){
         rows.push({
-          pseudo,
-          rating:item.rating,
-          text:item.text,
-          date:item.date,
-          published:!!item.published,
-          itemIndex
+          source:"legacy",pseudo,rating:Number(item.rating)||0,
+          text:item.text||"",date:item.date,published:!!item.published,itemIndex
         });
       }
     });
   });
 
+  // Nouveaux retours : table sécurisée Supabase.
+  (state.secureFeedback||[]).forEach(item=>{
+    if(authProfile?.is_admin||item.published||String(item.user_id)===String(authUser?.id)){
+      rows.push({
+        source:"secure",id:item.id,pseudo:item.pseudo||"Utilisateur",
+        rating:Number(item.rating)||0,text:item.message||"",
+        date:item.created_at,published:!!item.published
+      });
+    }
+  });
+
   rows.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
   if(!rows.length){
-    el.innerHTML = state.admin
+    el.innerHTML=authProfile?.is_admin
       ? '<div class="small">Aucun retour expérience pour le moment.</div>'
       : '';
     return;
   }
 
-  el.innerHTML =
-    (state.admin
+  el.innerHTML=
+    (authProfile?.is_admin
       ? '<div class="small" style="margin-bottom:6px">Gestion des retours expérience :</div>'
-      : '<div class="small" style="margin:14px 0 6px">Retours de la communauté :</div>') +
+      : '<div class="small" style="margin:14px 0 6px">Retours de la communauté :</div>')+
     rows.map(item=>`
       <div class="feedback-item">
         <strong>${escapeHtml(item.pseudo)}</strong>
-        — ${"★".repeat(item.rating)}${"☆".repeat(5-item.rating)}
+        — ${"★".repeat(item.rating)}${"☆".repeat(Math.max(0,5-item.rating))}
         <div class="small">${new Date(item.date).toLocaleString("fr-FR")}</div>
         <div style="margin-top:5px">${escapeHtml(item.text)}</div>
-        ${item.published ? `<span class="feedback-public-badge">Public</span>` : ""}
-        ${state.admin ? `
-          <div class="feedback-admin-actions">
-            <button class="btn-secondary" onclick="toggleFeedbackPublic('${escapeJSString(item.pseudo)}',${item.itemIndex})">
-              ${item.published ? "Masquer au public" : "Rendre public"}
-            </button>
-          </div>` : ""}
+        ${item.published?`<div class="small" style="margin-top:5px">Publié</div>`:
+          (item.source==="secure"&&String(item.id)&&String(item.pseudo)===String(state.user)
+            ? `<div class="small" style="margin-top:5px">En attente de publication</div>`:"")}
+        ${authProfile?.is_admin?`
+          <button class="btn-secondary" style="margin-top:7px"
+            onclick="${item.source==="secure"
+              ? `toggleFeedbackPublic('secure','${escapeAttr(item.id)}')`
+              : `toggleFeedbackPublic('legacy','${escapeAttr(item.pseudo)}',${item.itemIndex})`}">
+            ${item.published?"Masquer":"Rendre public"}
+          </button>`:""}
       </div>
     `).join("");
 }
+
+
 
 
 
@@ -6461,7 +9019,7 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
-loadData();
+bootstrapAuth();
 
 </script>
 
