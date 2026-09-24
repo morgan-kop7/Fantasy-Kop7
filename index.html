@@ -5975,9 +5975,25 @@ function renderRanking(){
     return;
   }
 
+  // Classement général : seuls les matchs réellement finalisés comptent.
+  // Avant le premier résultat officiel, aucun classement n'est calculé.
+  const finishedForGeneral = getFinishedMatchesChronological();
+
+  if(!finishedForGeneral.length){
+    container.innerHTML = tabs + `
+      <div class="ranking-context">
+        <strong>Saison 2026-2027</strong><br>
+        <span class="small">Le classement général apparaîtra après le premier match finalisé.</span>
+      </div>`;
+    return;
+  }
+
   const ranking = users.map(user => ({
       user,
-      total: state.matches.reduce((sum,match)=>sum+getMatchRankingEntry(user,match).total,0),
+      total: finishedForGeneral.reduce(
+        (sum,match)=>sum+getMatchRankingEntry(user,match).total,
+        0
+      ),
       movement:getRankMovement(user)
     }))
     .sort((a,b)=>b.total-a.total || a.user.localeCompare(b.user,"fr"));
@@ -6694,8 +6710,13 @@ async function renderUserHistory(){
       (pronosRes.data||[]).map(x=>[String(x.match_id),x])
     );
 
+    // L’historique ne doit contenir que les matchs réellement terminés.
+    // Un match futur / non scoré ne doit jamais déclencher la pénalité de non-participation.
     const matches=[...(state.matches||[])]
-      .filter(match=>isUserEligibleForMatch(state.user,match))
+      .filter(match=>
+        isUserEligibleForMatch(state.user,match) &&
+        match.resultCsp!==null && match.resultOpponent!==null
+      )
       .sort((a,b)=>new Date(b.start)-new Date(a.start));
 
     if(!matches.length){
