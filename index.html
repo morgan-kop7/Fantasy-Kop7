@@ -3529,7 +3529,7 @@ function openInfoModal(type){
       <div style="text-align:center">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADMUlEQVR4nO2bTW6sOhBGTz2QMjRSFpClmB3cNd2dwVJ6AZFgGMnoewPbQG7eJMqTySXFAIG7j7qsLtW/TXz6mv/5PAMOOeSQQw455NA9IStXD7AZrGY2rpaf8quZmY2XiOdQeyhKkhZgHjpBSOj3i2Q2gI10kiS9h9qJ51B7aN0NQH6t1iIq5ZVqQa4Rz6FmUP9fi0Yo5kDz8IpY/4dfcujvgD5oRFy2XgBGAFifPlYsvvmeHPoKVDUiCFjBCK95RYAsLoOpvrYXz6GroNnMzAYgPp5k49pjYw4mOtnIllONq8RzqLWNOAyA5pc3K08Dxjx0sIcVzcVzqDlEziqjEproRFyg3PY1Qsrfy9f0zffk0FegYiPmYZERXg1C6iEIY32WRUFNRsHi1FY8h5pD1MpTJ01AvuW1kCgfhARx6ZQrWW4j7gxx1CI1hZQ1griApiBJSrmieXIdrhF3huqfnEOIbo8VEvVWLIhrxA+BTh4i2wgtXXUYofQ68lqs1sI14tZQzTUWiq/QUh3GFI4k5Pxl14hbQ3s9IvWaX1Jfcg22XrD1mq2TxeU5WZy2WuD85nty6CvQqa9h0MP8a5FB6WZYHpe4TDyHmkMnr1GTiz3QPFLQI8pwr/FToJAgPsyYh82KHqw90uOp5Brx0WPjReI51AyqXmMdMELqjQAWH33KfQ1CQvNoiJB6tRbPoebQn/UIjiIldGXSjt2duNe4PVQ1Yi9ATHmmMtV211LUopSyXSPuDmWvkdMMVkOw1RGZtUs2v+TIsof1SdZaPIeaQyevcTQyapFSOtocJ9fhNuLO0J59dqqzEKVSWXPOfSbfNeJHQOdJmKMykW3E8ZQrE/Ju+A+A9jgCgC4JhNVOF8y/ErA+pxpltBXPoaugqNLntHHtqbMzm9UQIuUhOxuvEc+h9lA906XfdfLWxvxBnye1y/G/i8Rz6DLIRgBWM02AjeHNykDdslnpi/9le3LoU9e7+YiuVqj2aaq9v+WR5Q+B/jzTRT7EFd4M6BLQyeJUjnR4ZHl/6DR5Sx6n3J+ObnhUnabyesTtoQ9nut4/aV/SSV+++Z4ccsghhxxyyKE20L9RwHjsgHPrUQAAAABJRU5ErkJggg==" alt="QR Code Fantasy Kop 7" style="width:min(280px,80vw);background:white;padding:12px;border-radius:14px">
       </div>
-      <p class="small" style="text-align:center">morgan-kop7.github.io/Fantasy-Kop7/</p>`;
+      <p class="small" style="text-align:center">kop7.fr</p>`;
     modal.classList.remove("hidden");
     return;
   }
@@ -3872,7 +3872,7 @@ async function requestPasswordReset(){
     alert("Renseignez votre adresse e-mail dans le champ de connexion.");
     return;
   }
-  const redirectTo="https://morgan-kop7.github.io/Fantasy-Kop7/db-test.html";
+  const redirectTo=window.location.origin + '/';
   const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo});
   if(error){
     showToast("Envoi impossible",error.message,"error");
